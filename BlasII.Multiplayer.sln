@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlasII.Multiplayer.Client", "BlasII.Multiplayer.Client\BlasII.Multiplayer.Client.csproj", "{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3B8F864-03A1-40E8-A70C-73D380EA342C}
+	EndGlobalSection
+EndGlobal
