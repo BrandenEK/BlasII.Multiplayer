@@ -50,11 +50,11 @@ public class PlayerHandler
         ModLog.Warn($"New animation: {currAnimation}");
         _lastAnimation = currAnimation;
 
-        float percentTime = animState.normalizedTime;
-        float totalTime = animState.length;
+        float length = animState.length;
+        float time = animState.normalizedTime * animState.length;
 
         // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetAnimation(currAnimation, percentTime);
+        Main.Multiplayer.CompanionHandler.TempGetAnimation(currAnimation, time, length);
     }
 
     private void CheckDirection(Transform tpo)

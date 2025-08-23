@@ -38,6 +38,7 @@ public class Multiplayer : BlasIIMod
 
         UpdateTest();
 
+        CompanionHandler.OnUpdate();
         PlayerHandler.OnUpdate();
     }
 
@@ -48,7 +49,7 @@ public class Multiplayer : BlasIIMod
         if (sceneName == "MainMenu")
             return;
 
-        //CompanionHandler.OnEnterScene();
+        CompanionHandler.OnEnterScene();
     }
 
     protected override void OnSceneUnloaded(string sceneName)
@@ -60,8 +61,8 @@ public class Multiplayer : BlasIIMod
 
     private void OnPlayerSpawn()
     {
+        // Only called once, not every scene change
         ModLog.Warn("Player was spawned");
-        CompanionHandler.OnEnterScene();
     }
 
     private void SpawnTest()
@@ -97,8 +98,8 @@ public class Multiplayer : BlasIIMod
         foreach (var companion in _companions)
         {
             //companion.Transform.UpdatePosition(tpo.position);
-            companion.Transform.UpdateScale(tpo.localScale);
-            companion.Renderer.UpdateAnim(state, time);
+            //companion.Transform.UpdateScale(tpo.localScale);
+            //companion.Renderer.UpdateAnim(state, time);
         }
     }
 

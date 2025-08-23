@@ -11,13 +11,17 @@ public class CompanionHandler
     public void OnEnterScene()
     {
         _companions.Clear();
-
-        AddCompanion("Test");
     }
 
     public void OnLeaveScene()
     {
         _companions.Clear();
+    }
+
+    public void OnUpdate()
+    {
+        foreach (var companion in _companions.Values)
+            companion.Renderer.OnUpdate();
     }
 
     public void TempGetPosition(Vector2 position)
@@ -26,10 +30,10 @@ public class CompanionHandler
         c.Transform.UpdatePosition(position + Vector2.right * 5);
     }
 
-    public void TempGetAnimation(int state, float time)
+    public void TempGetAnimation(int state, float time, float length)
     {
         Companion c = GetCompanionByName("Test");
-        c.Renderer.UpdateAnim(state, time);
+        c.Renderer.UpdateAnim(state, time, length);
     }
 
     public void TempGetDirection(bool direction)
@@ -61,6 +65,9 @@ public class CompanionHandler
     private Companion GetCompanionByName(string name)
     {
         // TODO: check if they exist or not
+
+        if (!_companions.ContainsKey(name))
+            AddCompanion(name);
 
         return _companions[name];
     }
