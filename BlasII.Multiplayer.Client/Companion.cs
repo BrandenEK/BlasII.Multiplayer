@@ -18,4 +18,12 @@ public class Companion
         Transform = new CompanionTransform(GameObject.transform);
         Renderer = new CompanionRenderer(GameObject.transform);
     }
+
+    public void Destroy()
+    {
+        if (GameObject == null)
+            return;
+
+        Object.Destroy(GameObject);
+    }
 }
