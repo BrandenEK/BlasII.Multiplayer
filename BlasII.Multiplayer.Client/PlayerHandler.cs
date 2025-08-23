@@ -10,7 +10,7 @@ public class PlayerHandler
     private int _lastAnimation;
     private bool _lastDirection;
 
-    public void Update()
+    public void OnUpdate()
     {
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
         Transform tpo = player.GetChild(0);

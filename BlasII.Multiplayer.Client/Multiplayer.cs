@@ -8,10 +8,12 @@ namespace BlasII.Multiplayer.Client;
 
 public class Multiplayer : BlasIIMod
 {
+    public CompanionHandler CompanionHandler { get; }
     public PlayerHandler PlayerHandler { get; }
 
     internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
     {
+        CompanionHandler = new CompanionHandler();
         PlayerHandler = new PlayerHandler();
     }
 
@@ -36,17 +38,21 @@ public class Multiplayer : BlasIIMod
 
         UpdateTest();
 
-        PlayerHandler.Update();
+        PlayerHandler.OnUpdate();
     }
 
     protected override void OnSceneLoaded(string sceneName)
     {
         _companions.Clear();
+
+        CompanionHandler.OnEnterScene();
     }
 
     protected override void OnSceneUnloaded(string sceneName)
     {
         _companions.Clear();
+
+        CompanionHandler.OnLeaveScene();
     }
 
     private void OnPlayerSpawn()
