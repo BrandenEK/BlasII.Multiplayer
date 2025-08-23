@@ -7,7 +7,8 @@ namespace BlasII.Multiplayer.Client;
 public class PlayerHandler
 {
     private Vector2 _lastPosition;
-    private int _lastAnimation;
+    private int _lastAnimationState;
+    private float _lastAnimationTime;
     private bool _lastDirection;
 
     public void OnUpdate()
@@ -42,19 +43,18 @@ public class PlayerHandler
     {
         Animator anim = armor.GetComponent<Animator>();
         var animState = anim.GetCurrentAnimatorStateInfo(0);
-        int currAnimation = animState.nameHash;
+        int currAnimationState = animState.nameHash;
+        float currAnimationTime = animState.normalizedTime * animState.length;
 
-        if (_lastAnimation == currAnimation)
+        if (_lastAnimationState == currAnimationState && _lastAnimationTime < currAnimationTime)
             return;
 
-        ModLog.Warn($"New animation: {currAnimation}");
-        _lastAnimation = currAnimation;
-
-        float length = animState.length;
-        float time = animState.normalizedTime * animState.length;
+        ModLog.Warn($"New animation: {currAnimationState}");
+        _lastAnimationState = currAnimationState;
 
         // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetAnimation(currAnimation, time, length);
+        float length = animState.length;
+        Main.Multiplayer.CompanionHandler.TempGetAnimation(currAnimationState, currAnimationTime, length);
     }
 
     private void CheckDirection(Transform tpo)

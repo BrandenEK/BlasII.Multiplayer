@@ -97,21 +97,6 @@ public class CompanionRenderer
         return anim;
     }
 
-    //public void UpdateArmor(int state, float time)
-    //{
-    //    _armor.Play(state, 0, time);
-    //}
-
-    //public void UpdateWeapon(int state, float time)
-    //{
-    //    _weapon.Play(state, 0, time);
-    //}
-
-    //public void UpdateWeaponfx(int state, float time)
-    //{
-    //    _weaponfx.Play(state, 0, time);
-    //}
-
     public void UpdateAnim(int state, float time, float length)
     {
         _state = state;
