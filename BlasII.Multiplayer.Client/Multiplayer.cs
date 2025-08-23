@@ -8,11 +8,19 @@ namespace BlasII.Multiplayer.Client;
 
 public class Multiplayer : BlasIIMod
 {
-    internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
+    public CompanionHandler CompanionHandler { get; }
+    public PlayerHandler PlayerHandler { get; }
+
+    internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
+    {
+        CompanionHandler = new CompanionHandler();
+        PlayerHandler = new PlayerHandler();
+    }
 
     protected override void OnInitialize()
     {
         // Perform initialization here
+        CoreCache.PlayerSpawn.add_OnPlayerSpawned(new System.Action(OnPlayerSpawn));
     }
 
     protected override void OnUpdate()
@@ -25,17 +33,36 @@ public class Multiplayer : BlasIIMod
 
     protected override void OnLateUpdate()
     {
+        if (!SceneHelper.GameSceneLoaded || CoreCache.PlayerSpawn.PlayerInstance == null)
+            return;
+
         UpdateTest();
+
+        CompanionHandler.OnUpdate();
+        PlayerHandler.OnUpdate();
     }
 
     protected override void OnSceneLoaded(string sceneName)
     {
         _companions.Clear();
+
+        if (sceneName == "MainMenu")
+            return;
+
+        CompanionHandler.OnEnterScene();
     }
 
     protected override void OnSceneUnloaded(string sceneName)
     {
         _companions.Clear();
+
+        CompanionHandler.OnLeaveScene();
+    }
+
+    private void OnPlayerSpawn()
+    {
+        // Only called once, not every scene change
+        ModLog.Warn("Player was spawned");
     }
 
     private void SpawnTest()
@@ -57,6 +84,7 @@ public class Multiplayer : BlasIIMod
             return;
 
         // Change this to a script on the player object with a reference to the animator
+        // Although, the armor object might be replaced
 
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
         Transform tpo = player.GetChild(0);
@@ -70,8 +98,8 @@ public class Multiplayer : BlasIIMod
         foreach (var companion in _companions)
         {
             //companion.Transform.UpdatePosition(tpo.position);
-            companion.Transform.UpdateScale(tpo.localScale);
-            companion.Renderer.UpdateAnim(state, time);
+            //companion.Transform.UpdateScale(tpo.localScale);
+            //companion.Renderer.UpdateAnim(state, time);
         }
     }
 
