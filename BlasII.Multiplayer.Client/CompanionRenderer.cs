@@ -1,5 +1,8 @@
 ﻿using BlasII.ModdingAPI;
 using Il2CppTGK.Game;
+using Il2CppTGK.Game.Components.Attack.Data;
+using Il2CppTGK.Game.Components.Defense.Data;
+using System.Linq;
 using UnityEngine;
 
 namespace BlasII.Multiplayer.Client;
@@ -92,8 +95,7 @@ public class CompanionRenderer
         sr.sortingOrder = sort; // Armor = 0, Weapon = 2, Weapon VFX = 1000
 
         var anim = child.AddComponent<Animator>();
-        anim.runtimeAnimatorController = player.GetComponent<Animator>().runtimeAnimatorController;
-        ModLog.Error(anim.runtimeAnimatorController.name);
+        //anim.runtimeAnimatorController = player.GetComponent<Animator>().runtimeAnimatorController;
 
         return anim;
     }
@@ -107,7 +109,44 @@ public class CompanionRenderer
 
     public void UpdateEquipment(int type, string name)
     {
+        if (type == 0) // Armor
+        {
+            RuntimeAnimatorController anim = GetArmorAnimator(name);
+            _armor.runtimeAnimatorController = anim;
+        }
+        else if (type == 1) // Weapon
+        {
+            RuntimeAnimatorController anim = GetWeaponAnimator(name);
+            _weapon.runtimeAnimatorController = anim;
+        }
+    }
 
+    private RuntimeAnimatorController GetArmorAnimator(string name)
+    {
+        var collection = Resources.FindObjectsOfTypeAll<ArmorsCollection>().First();
+        
+        foreach (var anim in collection.armorsAnimsLookUp.Values)
+        {
+            if (anim.runtimeAnimatorController.name == name)
+                return anim.runtimeAnimatorController;
+        }
+
+        ModLog.Error($"Failed to find armor anim: {name}");
+        return null;
+    }
+
+    private RuntimeAnimatorController GetWeaponAnimator(string name)
+    {
+        var collection = Resources.FindObjectsOfTypeAll<WeaponsCollection>().First();
+
+        foreach (var anim in collection.weaponsAnimsLookUp.Values)
+        {
+            if (anim.runtimeAnimatorController.name == name)
+                return anim.runtimeAnimatorController;
+        }
+
+        ModLog.Error($"Failed to find weapon anim: {name}");
+        return null;
     }
 
     public void OnUpdate()

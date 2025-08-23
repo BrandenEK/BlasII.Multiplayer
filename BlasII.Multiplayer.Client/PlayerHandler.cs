@@ -2,7 +2,6 @@
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components.Attack.Data;
 using Il2CppTGK.Game.Components.Defense.Data;
-using System.Linq;
 using UnityEngine;
 
 namespace BlasII.Multiplayer.Client;
@@ -17,6 +16,30 @@ public class PlayerHandler
     private string _lastArmorName;
     private string _lastWeaponName;
     private string _lastWeaponfxName;
+
+    public void OnEnterScene() // Not sure if this actually does anything
+    {
+        _lastPosition = Vector2.zero;
+        _lastAnimationState = 0;
+        _lastAnimationTime = 0;
+        _lastDirection = false;
+
+        _lastArmorName = string.Empty;
+        _lastWeaponName = string.Empty;
+        _lastWeaponfxName = string.Empty;
+    }
+
+    public void OnLeaveScene()
+    {
+        _lastPosition = Vector2.zero;
+        _lastAnimationState = 0;
+        _lastAnimationTime = 0;
+        _lastDirection = false;
+
+        _lastArmorName = string.Empty;
+        _lastWeaponName = string.Empty;
+        _lastWeaponfxName = string.Empty;
+    }
 
     public void OnUpdate()
     {
@@ -102,9 +125,6 @@ public class PlayerHandler
         ModLog.Warn($"New armor: {currArmorName}");
         _lastArmorName = currArmorName;
 
-        foreach (var col in Resources.FindObjectsOfTypeAll<ArmorsCollection>())
-            ModLog.Info(col.name);
-
         //int id = -1;
         //WeaponsCollection collection = Resources.FindObjectsOfTypeAll<WeaponsCollection>().First();
         //foreach (var kvp in collection.weaponsAnimsLookUp)
@@ -128,9 +148,6 @@ public class PlayerHandler
 
         ModLog.Warn($"New weapon: {currWeaponName}");
         _lastWeaponName = currWeaponName;
-
-        foreach (var col in Resources.FindObjectsOfTypeAll<WeaponsCollection>())
-            ModLog.Info(col.name);
 
         // Send packet
         Main.Multiplayer.CompanionHandler.TempGetEquipment(1, currWeaponName);
