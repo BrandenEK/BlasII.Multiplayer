@@ -31,6 +31,9 @@ public class Multiplayer : BlasIIMod
 
     protected override void OnLateUpdate()
     {
+        if (!SceneHelper.GameSceneLoaded || CoreCache.PlayerSpawn.PlayerInstance == null)
+            return;
+
         UpdateTest();
 
         PlayerHandler.Update();

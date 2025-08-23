@@ -15,33 +15,11 @@ public class PlayerHandler
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
         Transform tpo = player.GetChild(0);
         Transform graphic = tpo.GetChild(0);
-        Animator anim = graphic.Find("armor").GetComponent<Animator>();
-        var animState = anim.GetCurrentAnimatorStateInfo(0);
+        Transform armor = graphic.Find("armor");
 
         CheckPosition(tpo);
-
-        // Check animation
-        int currAnimation = animState.nameHash;
-        if (_lastAnimation != currAnimation)
-        {
-            ModLog.Warn($"New animation: {currAnimation}");
-            _lastAnimation = currAnimation;
-
-            float percentTime = animState.normalizedTime;
-            float totalTime = animState.length;
-
-            // Send packet
-        }
-
-        // Check direction
-        bool currDirection = tpo.localScale.x >= 0;
-        if (_lastDirection != currDirection)
-        {
-            ModLog.Warn($"New direction: {currDirection}");
-            _lastDirection = currDirection;
-
-            // Send packet
-        }
+        CheckAnimation(armor);
+        CheckDirection(tpo);
     }
 
     private void CheckPosition(Transform tpo)
@@ -55,6 +33,37 @@ public class PlayerHandler
 
         ModLog.Warn($"New position: {currPosition}");
         _lastPosition = currPosition;
+
+        // Send packet
+    }
+
+    private void CheckAnimation(Transform armor)
+    {
+        Animator anim = armor.GetComponent<Animator>();
+        var animState = anim.GetCurrentAnimatorStateInfo(0);
+        int currAnimation = animState.nameHash;
+
+        if (_lastAnimation == currAnimation)
+            return;
+
+        ModLog.Warn($"New animation: {currAnimation}");
+        _lastAnimation = currAnimation;
+
+        float percentTime = animState.normalizedTime;
+        float totalTime = animState.length;
+
+        // Send packet
+    }
+
+    private void CheckDirection(Transform tpo)
+    {
+        bool currDirection = tpo.localScale.x >= 0;
+
+        if (_lastDirection == currDirection)
+            return;
+
+        ModLog.Warn($"New direction: {currDirection}");
+        _lastDirection = currDirection;
 
         // Send packet
     }
