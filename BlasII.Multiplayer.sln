@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlasII.Multiplayer.Client", "BlasII.Multiplayer.Client\BlasII.Multiplayer.Client.csproj", "{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlasII.Multiplayer.Server", "BlasII.Multiplayer.Server\BlasII.Multiplayer.Server.csproj", "{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DCC9A85-9E4C-4451-8A93-9A9E87CBD0F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
