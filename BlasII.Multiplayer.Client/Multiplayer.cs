@@ -1,5 +1,6 @@
 ﻿using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
+using BlasII.Multiplayer.Client.Storages;
 using Il2CppTGK.Game;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,16 +12,22 @@ public class Multiplayer : BlasIIMod
     public CompanionHandler CompanionHandler { get; }
     public PlayerHandler PlayerHandler { get; }
 
+    public AnimationStorage AnimationStorage { get; }
+
     internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
     {
         CompanionHandler = new CompanionHandler();
         PlayerHandler = new PlayerHandler();
+
+        AnimationStorage = new AnimationStorage();
     }
 
     protected override void OnInitialize()
     {
         // Perform initialization here
         CoreCache.PlayerSpawn.add_OnPlayerSpawned(new System.Action(OnPlayerSpawn));
+
+        AnimationStorage.Initialize();
     }
 
     protected override void OnUpdate()
