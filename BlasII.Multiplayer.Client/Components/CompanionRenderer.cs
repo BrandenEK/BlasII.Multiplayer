@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace BlasII.Multiplayer.Client;
+namespace BlasII.Multiplayer.Client.Components;
 
 public class CompanionRenderer
 {

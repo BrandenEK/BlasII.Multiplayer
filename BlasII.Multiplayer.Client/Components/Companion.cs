@@ -1,7 +1,7 @@
 ﻿using BlasII.ModdingAPI;
 using UnityEngine;
 
-namespace BlasII.Multiplayer.Client;
+namespace BlasII.Multiplayer.Client.Components;
 
 public class Companion
 {

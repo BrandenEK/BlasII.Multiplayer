@@ -1,4 +1,5 @@
 ﻿using BlasII.ModdingAPI;
+using BlasII.Multiplayer.Client.Components;
 using System.Collections.Generic;
 using UnityEngine;
 
