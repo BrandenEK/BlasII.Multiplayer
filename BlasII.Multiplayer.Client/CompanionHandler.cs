@@ -42,6 +42,12 @@ public class CompanionHandler
         c.Transform.UpdateDirection(direction);
     }
 
+    public void TempGetEquipment(int type, int id)
+    {
+        Companion c = GetCompanionByName("Test");
+        c.Renderer.UpdateEquipment(type, id);
+    }
+
     private void AddCompanion(string name)
     {
         // TODO: check for name collision

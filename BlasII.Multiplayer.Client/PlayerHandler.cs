@@ -1,5 +1,7 @@
 ﻿using BlasII.ModdingAPI;
 using Il2CppTGK.Game;
+using Il2CppTGK.Game.Components.Attack.Data;
+using System.Linq;
 using UnityEngine;
 
 namespace BlasII.Multiplayer.Client;
@@ -11,6 +13,10 @@ public class PlayerHandler
     private float _lastAnimationTime;
     private bool _lastDirection;
 
+    private string _lastArmorName;
+    private string _lastWeaponName;
+    private string _lastWeaponfxName;
+
     public void OnUpdate()
     {
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
@@ -21,6 +27,9 @@ public class PlayerHandler
         CheckPosition(tpo);
         CheckAnimation(armor);
         CheckDirection(tpo);
+        //CheckEquipment(graphic);
+
+        CheckArmor(armor);
     }
 
     private void CheckPosition(Transform tpo)
@@ -69,6 +78,43 @@ public class PlayerHandler
 
         // Send packet
         Main.Multiplayer.CompanionHandler.TempGetDirection(currDirection);
+    }
+
+    private void CheckEquipment(Transform graphic)
+    {
+        Transform armor = graphic.Find("armor");
+        Transform weapon = graphic.Find("weapon");
+        Transform weaponfx = graphic.Find("weapon_effects");
+
+        //Animator armorAnim = armor.GetComponent<Animator>();
+        string currArmorName = armor.GetComponent<Animator>().runtimeAnimatorController.name;
+    }
+
+    private void CheckArmor(Transform armor)
+    {
+        string currArmorName = armor.GetComponent<Animator>().runtimeAnimatorController.name;
+
+        if (_lastArmorName == currArmorName)
+            return;
+
+        ModLog.Warn($"New armor: {currArmorName}");
+        _lastArmorName = currArmorName;
+
+        foreach (var col in Resources.FindObjectsOfTypeAll<WeaponsCollection>())
+            ModLog.Info(col.name);
+
+        //int id = -1;
+        //WeaponsCollection collection = Resources.FindObjectsOfTypeAll<WeaponsCollection>().First();
+        //foreach (var kvp in collection.weaponsAnimsLookUp)
+        //{
+        //    if (kvp.value.runtimeAnimatorController.name == currArmorName)
+
+        //}
+
+        //int id = collection.weaponsAnimsLookUp
+
+        // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(0, )
     }
 
     private const int PRECISION = 5;

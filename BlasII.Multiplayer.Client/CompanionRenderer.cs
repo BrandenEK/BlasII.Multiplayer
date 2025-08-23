@@ -105,6 +105,11 @@ public class CompanionRenderer
         _length = length;
     }
 
+    public void UpdateEquipment(int type, int id)
+    {
+
+    }
+
     public void OnUpdate()
     {
         _time += Time.deltaTime;
