@@ -42,10 +42,10 @@ public class CompanionHandler
         c.Transform.UpdateDirection(direction);
     }
 
-    public void TempGetEquipment(int type, int id)
+    public void TempGetEquipment(int type, string name)
     {
         Companion c = GetCompanionByName("Test");
-        c.Renderer.UpdateEquipment(type, id);
+        c.Renderer.UpdateEquipment(type, name);
     }
 
     private void AddCompanion(string name)

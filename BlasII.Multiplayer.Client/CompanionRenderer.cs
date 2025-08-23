@@ -105,7 +105,7 @@ public class CompanionRenderer
         _length = length;
     }
 
-    public void UpdateEquipment(int type, int id)
+    public void UpdateEquipment(int type, string name)
     {
 
     }

@@ -1,6 +1,7 @@
 ﻿using BlasII.ModdingAPI;
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components.Attack.Data;
+using Il2CppTGK.Game.Components.Defense.Data;
 using System.Linq;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ public class PlayerHandler
         //CheckEquipment(graphic);
 
         CheckArmor(armor);
+        CheckWeapon(graphic.Find("weapon"));
     }
 
     private void CheckPosition(Transform tpo)
@@ -100,7 +102,7 @@ public class PlayerHandler
         ModLog.Warn($"New armor: {currArmorName}");
         _lastArmorName = currArmorName;
 
-        foreach (var col in Resources.FindObjectsOfTypeAll<WeaponsCollection>())
+        foreach (var col in Resources.FindObjectsOfTypeAll<ArmorsCollection>())
             ModLog.Info(col.name);
 
         //int id = -1;
@@ -114,7 +116,24 @@ public class PlayerHandler
         //int id = collection.weaponsAnimsLookUp
 
         // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetEquipment(0, )
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(0, currArmorName);
+    }
+
+    private void CheckWeapon(Transform weapon)
+    {
+        string currWeaponName = weapon.GetComponent<Animator>().runtimeAnimatorController.name;
+
+        if (_lastWeaponName == currWeaponName)
+            return;
+
+        ModLog.Warn($"New weapon: {currWeaponName}");
+        _lastWeaponName = currWeaponName;
+
+        foreach (var col in Resources.FindObjectsOfTypeAll<WeaponsCollection>())
+            ModLog.Info(col.name);
+
+        // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(1, currWeaponName);
     }
 
     private const int PRECISION = 5;
