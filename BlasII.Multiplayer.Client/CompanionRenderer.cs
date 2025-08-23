@@ -1,7 +1,7 @@
 ﻿using BlasII.ModdingAPI;
-using Il2CppSystem.Collections.Generic;
 using Il2CppTGK.Game.Components.Attack.Data;
 using Il2CppTGK.Game.Components.Defense.Data;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -49,61 +49,155 @@ public class CompanionRenderer
         _length = length;
     }
 
+    //public void UpdateEquipment(int type, string name)
+    //{
+    //    Animator anim;
+    //    IEnumerable<RuntimeAnimatorController> controllers; 
+
+    //    switch (type)
+    //    {
+    //        case 0:
+    //            anim = _armor;
+    //            controllers
+
+    //            TryGetAnimator<ArmorsCollection>(name, x => x.armorsAnimsLookUp, out RuntimeAnimatorController controller);
+
+    //            animators = Resources.FindObjectsOfTypeAll<ArmorsCollection>().Select(x => x.armorsAnimsLookUp);
+    //            break;
+    //        case 1:
+    //            anim = _weapon;
+    //            animators = Resources.FindObjectsOfTypeAll<WeaponsCollection>().First().weaponsAnimsLookUp;
+    //            break;
+    //        case 2:
+    //            anim = _weaponfx;
+    //            animators = Resources.FindObjectsOfTypeAll<WeaponEffectsCollection>().First().weaponEffectsAnimsLookUp;
+    //            break;
+    //        default:
+    //            ModLog.Error($"Failed to update equipment for type {type}");
+    //            return;
+    //    }
+
+    //    foreach (var x in lookup.Values)
+    //        ModLog.Info(x.runtimeAnimatorController.name);
+
+    //    if (string.IsNullOrEmpty(name))
+    //    {
+    //        anim.runtimeAnimatorController = null;
+    //        return;
+    //    }
+
+    //    if (TryGetAnimator(name, lookup, out RuntimeAnimatorController controller))
+    //    {
+    //        anim.runtimeAnimatorController = controller;
+    //        return;
+    //    }
+
+    //    ModLog.Error($"Failed to find animator {name} for type {type}");
+    //}
+
+    //private bool TryGetAnimator(string name, Dictionary<int, Animator> lookup, out RuntimeAnimatorController anim)
+    //{
+    //    foreach (var a in lookup.Values)
+    //    {
+    //        if (a.runtimeAnimatorController.name == name)
+    //        {
+    //            anim = a.runtimeAnimatorController;
+    //            return true;
+    //        }
+    //    }
+
+    //    anim = null;
+    //    return false;
+    //}
+
+    //// This can be done once in initialize
+    //private IEnumerable<RuntimeAnimatorController> GetControllers<T>(Func<T, Il2CppSystem.Collections.Generic.Dictionary<int, Animator>> lookupSelector) where T : ScriptableObject
+    //{
+    //    var controllers = new List<RuntimeAnimatorController>();
+
+    //    foreach (var collection in Resources.FindObjectsOfTypeAll<T>())
+    //    {
+    //        foreach (var anim in lookupSelector(collection).Values)
+    //        {
+    //            controllers.Add(anim.runtimeAnimatorController);
+    //        }
+    //    }
+
+    //    return controllers;
+    //}
+
+    //private bool TryGetAnimator<T>(string name, Func<T, Dictionary<int, Animator>> lookupSelector, out RuntimeAnimatorController anim)
+    //{
+    //    foreach (var a in lookup.Values)
+    //    {
+    //        if (a.runtimeAnimatorController.name == name)
+    //        {
+    //            anim = a.runtimeAnimatorController;
+    //            return true;
+    //        }
+    //    }
+
+    //    anim = null;
+    //    return false;
+    //}
+
+    // debug
+
     public void UpdateEquipment(int type, string name)
     {
-        Animator anim;
-        Dictionary<int, Animator> lookup;
-
-        switch (type)
+        if (type < 0 || type > 2)
         {
-            case 0:
-                anim = _armor;
-                lookup = Resources.FindObjectsOfTypeAll<ArmorsCollection>().First().armorsAnimsLookUp;
-                break;
-            case 1:
-                anim = _weapon;
-                lookup = Resources.FindObjectsOfTypeAll<WeaponsCollection>().First().weaponsAnimsLookUp;
-                break;
-            case 2:
-                anim = _weaponfx;
-                lookup = Resources.FindObjectsOfTypeAll<WeaponEffectsCollection>().First().weaponEffectsAnimsLookUp;
-                break;
-            default:
-                ModLog.Error($"Failed to update equipment for type {type}");
-                return;
+            ModLog.Error($"Failed to update equipment for type {type}");
+            return;
         }
 
-        foreach (var x in lookup.Values)
-            ModLog.Info(x.runtimeAnimatorController.name);
+        Animator anim = type switch
+        {
+            0 => _armor,
+            1 => _weapon,
+            2 => _weaponfx,
+            _ => null
+        };
 
         if (string.IsNullOrEmpty(name))
         {
-            anim.runtimeAnimatorController = null;
-            return;
+            //anim.runtimeAnimatorController = null;
+            //return;
         }
 
-        if (TryGetAnimator(name, lookup, out RuntimeAnimatorController controller))
+        RuntimeAnimatorController controller = GetAllControllers().FirstOrDefault(x => x.name == name);
+
+        if (controller == null)
         {
-            anim.runtimeAnimatorController = controller;
+            ModLog.Error($"Failed to find animator {name} for type {type}");
             return;
         }
 
-        ModLog.Error($"Failed to find animator {name} for type {type}");
+        anim.runtimeAnimatorController = controller;
     }
 
-    private bool TryGetAnimator(string name, Dictionary<int, Animator> lookup, out RuntimeAnimatorController anim)
+    private static List<RuntimeAnimatorController> _controllers;
+
+    private static IEnumerable<RuntimeAnimatorController> GetAllControllers()
     {
-        foreach (var a in lookup.Values)
+        if (_controllers != null)
+            return _controllers;
+
+        _controllers = new List<RuntimeAnimatorController>();
+
+        var lookups = Resources.FindObjectsOfTypeAll<ArmorsCollection>().Select(x => x.armorsAnimsLookUp)
+            .Concat(Resources.FindObjectsOfTypeAll<WeaponsCollection>().Select(x => x.weaponsAnimsLookUp))
+            .Concat(Resources.FindObjectsOfTypeAll<WeaponEffectsCollection>().Select(x => x.weaponEffectsAnimsLookUp));
+
+        foreach (var lookup in lookups)
         {
-            if (a.runtimeAnimatorController.name == name)
+            foreach (var anim in lookup.Values)
             {
-                anim = a.runtimeAnimatorController;
-                return true;
+                _controllers.Add(anim.runtimeAnimatorController);
             }
         }
 
-        anim = null;
-        return false;
+        return _controllers;
     }
 
     public void OnUpdate()
