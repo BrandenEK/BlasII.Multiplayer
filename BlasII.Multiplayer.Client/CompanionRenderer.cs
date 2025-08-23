@@ -74,12 +74,12 @@ public class CompanionRenderer
     {
         ModLog.Info("Creating new CompanionRenderer");
 
-        _armor = CreateAnim("armor", companion);
-        _weapon = CreateAnim("weapon", companion);
-        _weaponfx = CreateAnim("weapon_effects", companion);
+        _armor = CreateAnim("armor", -4, companion);
+        _weapon = CreateAnim("weapon", -3, companion);
+        _weaponfx = CreateAnim("weapon_effects", -2, companion);
     }
 
-    private Animator CreateAnim(string name, Transform parent)
+    private Animator CreateAnim(string name, int sort, Transform parent)
     {
         GameObject player = CoreCache.PlayerSpawn.PlayerInstance.transform.GetChild(0).GetChild(0).Find(name).gameObject;
 
@@ -89,7 +89,7 @@ public class CompanionRenderer
 
         var sr = child.AddComponent<SpriteRenderer>();
         sr.sortingLayerName = "Player";
-        sr.sortingOrder = -1; // 0, 2, 1000
+        sr.sortingOrder = sort; // Armor = 0, Weapon = 2, Weapon VFX = 1000
 
         var anim = child.AddComponent<Animator>();
         anim.runtimeAnimatorController = player.GetComponent<Animator>().runtimeAnimatorController;
