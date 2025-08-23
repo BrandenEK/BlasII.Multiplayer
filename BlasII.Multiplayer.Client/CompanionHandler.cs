@@ -26,22 +26,27 @@ public class CompanionHandler
 
     private void AddCompanion(string name)
     {
-        // TODO: check for name collision
-
-        Companion companion = new Companion(name);
-        _companions.Add(name, companion);
+        if (_companions.ContainsKey(name))
+        {
+            ModLog.Warn($"Failed to add companion {name} because they already exist");
+            return;
+        }
 
         ModLog.Info($"Adding companion {name}");
+        _companions.Add(name, new Companion(name));
     }
 
     private void RemoveCompanion(string name)
     {
-        // TODO: actually get the object and destroy it, or log warning
-
-        if (_companions.ContainsKey(name))
-            _companions.Remove(name);
+        if (!_companions.TryGetValue(name, out Companion companion))
+        {
+            ModLog.Warn($"Failed to remove companion {name} because they don't exist");
+            return;
+        }
 
         ModLog.Info($"Removing companion {name}");
+        companion.Destroy();
+        _companions.Remove(name);
     }
 
     private void RemoveAllCompanions()
@@ -51,7 +56,7 @@ public class CompanionHandler
         _companions.Clear();
     }
 
-    private Companion GetCompanionByName(string name)
+    private Companion GetCompanionByName(string name) // Remove this and just check for companion with TryGetValue
     {
         // TODO: check if they exist or not
 
