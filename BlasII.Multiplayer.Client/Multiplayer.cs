@@ -8,11 +8,17 @@ namespace BlasII.Multiplayer.Client;
 
 public class Multiplayer : BlasIIMod
 {
-    internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
+    public PlayerHandler PlayerHandler { get; }
+
+    internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
+    {
+        PlayerHandler = new PlayerHandler();
+    }
 
     protected override void OnInitialize()
     {
         // Perform initialization here
+        CoreCache.PlayerSpawn.add_OnPlayerSpawned(new System.Action(OnPlayerSpawn));
     }
 
     protected override void OnUpdate()
@@ -26,6 +32,8 @@ public class Multiplayer : BlasIIMod
     protected override void OnLateUpdate()
     {
         UpdateTest();
+
+        PlayerHandler.Update();
     }
 
     protected override void OnSceneLoaded(string sceneName)
@@ -36,6 +44,11 @@ public class Multiplayer : BlasIIMod
     protected override void OnSceneUnloaded(string sceneName)
     {
         _companions.Clear();
+    }
+
+    private void OnPlayerSpawn()
+    {
+        ModLog.Warn("Player was spawned");
     }
 
     private void SpawnTest()
@@ -57,6 +70,7 @@ public class Multiplayer : BlasIIMod
             return;
 
         // Change this to a script on the player object with a reference to the animator
+        // Although, the armor object might be replaced
 
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
         Transform tpo = player.GetChild(0);
