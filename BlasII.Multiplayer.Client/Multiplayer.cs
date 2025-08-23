@@ -1,6 +1,7 @@
 ﻿using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
+using Il2CppTGK.Game.Components.Animation.AnimatorManagement.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +46,17 @@ public class Multiplayer : BlasIIMod
     protected override void OnSceneLoaded(string sceneName)
     {
         _companions.Clear();
+
+        ModLog.Warn("Finding anim controllers");
+        foreach (var obj in Object.FindObjectsOfType<RuntimeAnimatorController>())
+        {
+            ModLog.Info(obj.name);
+        }
+        foreach (var obj in Object.FindObjectOfType<PlayerAnimatorManager>().weaponsAnimators)
+        {
+            ModLog.Info(obj.name + ": " + obj.runtimeAnimatorController.name);
+        }
+        // Use WeaponsCollection
 
         if (sceneName == "MainMenu")
             return;

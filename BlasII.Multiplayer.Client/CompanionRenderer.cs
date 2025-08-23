@@ -93,6 +93,7 @@ public class CompanionRenderer
 
         var anim = child.AddComponent<Animator>();
         anim.runtimeAnimatorController = player.GetComponent<Animator>().runtimeAnimatorController;
+        ModLog.Error(anim.runtimeAnimatorController.name);
 
         return anim;
     }

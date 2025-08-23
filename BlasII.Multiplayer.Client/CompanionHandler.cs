@@ -27,7 +27,7 @@ public class CompanionHandler
     public void TempGetPosition(Vector2 position)
     {
         Companion c = GetCompanionByName("Test");
-        c.Transform.UpdatePosition(position + Vector2.right * 5);
+        c.Transform.UpdatePosition(position + Vector2.right * 2);
     }
 
     public void TempGetAnimation(int state, float time, float length)
