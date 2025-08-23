@@ -1,7 +1,5 @@
 ﻿using BlasII.ModdingAPI;
 using Il2CppTGK.Game;
-using Il2CppTGK.Game.Components.Attack.Data;
-using Il2CppTGK.Game.Components.Defense.Data;
 using UnityEngine;
 
 namespace BlasII.Multiplayer.Client;
@@ -46,15 +44,18 @@ public class PlayerHandler
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
         Transform tpo = player.GetChild(0);
         Transform graphic = tpo.GetChild(0);
-        Transform armor = graphic.Find("armor");
+
+        Animator armor = graphic.Find("armor").GetComponent<Animator>();
+        Animator weapon = graphic.Find("weapon").GetComponent<Animator>();
+        Animator weaponfx = graphic.Find("weapon_effects").GetComponent<Animator>();
 
         CheckPosition(tpo);
         CheckAnimation(armor);
         CheckDirection(tpo);
-        //CheckEquipment(graphic);
 
         CheckArmor(armor);
-        CheckWeapon(graphic.Find("weapon"));
+        CheckWeapon(weapon);
+        CheckWeaponEffects(weaponfx);
     }
 
     private void CheckPosition(Transform tpo)
@@ -73,10 +74,9 @@ public class PlayerHandler
         Main.Multiplayer.CompanionHandler.TempGetPosition(currPosition);
     }
 
-    private void CheckAnimation(Transform armor)
+    private void CheckAnimation(Animator armor)
     {
-        Animator anim = armor.GetComponent<Animator>();
-        var animState = anim.GetCurrentAnimatorStateInfo(0);
+        var animState = armor.GetCurrentAnimatorStateInfo(0);
         int currAnimationState = animState.nameHash;
         float currAnimationTime = animState.normalizedTime * animState.length;
 
@@ -105,19 +105,9 @@ public class PlayerHandler
         Main.Multiplayer.CompanionHandler.TempGetDirection(currDirection);
     }
 
-    private void CheckEquipment(Transform graphic)
+    private void CheckArmor(Animator armor)
     {
-        Transform armor = graphic.Find("armor");
-        Transform weapon = graphic.Find("weapon");
-        Transform weaponfx = graphic.Find("weapon_effects");
-
-        //Animator armorAnim = armor.GetComponent<Animator>();
-        string currArmorName = armor.GetComponent<Animator>().runtimeAnimatorController.name;
-    }
-
-    private void CheckArmor(Transform armor)
-    {
-        string currArmorName = armor.GetComponent<Animator>().runtimeAnimatorController.name;
+        string currArmorName = armor.runtimeAnimatorController.name;
 
         if (_lastArmorName == currArmorName)
             return;
@@ -125,23 +115,13 @@ public class PlayerHandler
         ModLog.Warn($"New armor: {currArmorName}");
         _lastArmorName = currArmorName;
 
-        //int id = -1;
-        //WeaponsCollection collection = Resources.FindObjectsOfTypeAll<WeaponsCollection>().First();
-        //foreach (var kvp in collection.weaponsAnimsLookUp)
-        //{
-        //    if (kvp.value.runtimeAnimatorController.name == currArmorName)
-
-        //}
-
-        //int id = collection.weaponsAnimsLookUp
-
         // Send packet
         Main.Multiplayer.CompanionHandler.TempGetEquipment(0, currArmorName);
     }
 
-    private void CheckWeapon(Transform weapon)
+    private void CheckWeapon(Animator weapon)
     {
-        string currWeaponName = weapon.GetComponent<Animator>().runtimeAnimatorController.name;
+        string currWeaponName = weapon.runtimeAnimatorController.name;
 
         if (_lastWeaponName == currWeaponName)
             return;
@@ -151,6 +131,20 @@ public class PlayerHandler
 
         // Send packet
         Main.Multiplayer.CompanionHandler.TempGetEquipment(1, currWeaponName);
+    }
+
+    private void CheckWeaponEffects(Animator weaponfx)
+    {
+        string currWeaponfxName = weaponfx.runtimeAnimatorController.name;
+
+        if (_lastWeaponfxName == currWeaponfxName)
+            return;
+
+        ModLog.Warn($"New weaponfx: {currWeaponfxName}");
+        _lastWeaponfxName = currWeaponfxName;
+
+        // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(2, currWeaponfxName);
     }
 
     private const int PRECISION = 5;
