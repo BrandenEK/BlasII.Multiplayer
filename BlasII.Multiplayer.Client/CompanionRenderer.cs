@@ -73,13 +73,22 @@ public class CompanionRenderer
                 return;
         }
 
-        if (!TryGetAnimator(name, lookup, out RuntimeAnimatorController controller))
+        foreach (var x in lookup.Values)
+            ModLog.Info(x.runtimeAnimatorController.name);
+
+        if (string.IsNullOrEmpty(name))
         {
-            ModLog.Error($"Failed to find animator {name} for type {type}");
+            anim.runtimeAnimatorController = null;
             return;
         }
 
-        anim.runtimeAnimatorController = controller;
+        if (TryGetAnimator(name, lookup, out RuntimeAnimatorController controller))
+        {
+            anim.runtimeAnimatorController = controller;
+            return;
+        }
+
+        ModLog.Error($"Failed to find animator {name} for type {type}");
     }
 
     private bool TryGetAnimator(string name, Dictionary<int, Animator> lookup, out RuntimeAnimatorController anim)

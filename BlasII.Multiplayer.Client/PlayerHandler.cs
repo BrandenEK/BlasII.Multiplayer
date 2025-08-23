@@ -107,7 +107,7 @@ public class PlayerHandler
 
     private void CheckArmor(Animator armor)
     {
-        string currArmorName = armor.runtimeAnimatorController.name;
+        string currArmorName = armor.runtimeAnimatorController?.name ?? string.Empty;
 
         if (_lastArmorName == currArmorName)
             return;
@@ -121,7 +121,7 @@ public class PlayerHandler
 
     private void CheckWeapon(Animator weapon)
     {
-        string currWeaponName = weapon.runtimeAnimatorController.name;
+        string currWeaponName = weapon.runtimeAnimatorController?.name ?? string.Empty;
 
         if (_lastWeaponName == currWeaponName)
             return;
@@ -135,7 +135,7 @@ public class PlayerHandler
 
     private void CheckWeaponEffects(Animator weaponfx)
     {
-        string currWeaponfxName = weaponfx.runtimeAnimatorController.name;
+        string currWeaponfxName = weaponfx.runtimeAnimatorController?.name ?? string.Empty;
 
         if (_lastWeaponfxName == currWeaponfxName)
             return;
