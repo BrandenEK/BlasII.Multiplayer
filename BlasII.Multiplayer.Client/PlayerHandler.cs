@@ -11,16 +11,51 @@ public class PlayerHandler
     private float _lastAnimationTime;
     private bool _lastDirection;
 
+    private string _lastArmorName;
+    private string _lastWeaponName;
+    private string _lastWeaponfxName;
+
+    public void OnEnterScene() // Not sure if this actually does anything
+    {
+        _lastPosition = Vector2.zero;
+        _lastAnimationState = 0;
+        _lastAnimationTime = 0;
+        _lastDirection = false;
+
+        _lastArmorName = string.Empty;
+        _lastWeaponName = string.Empty;
+        _lastWeaponfxName = string.Empty;
+    }
+
+    public void OnLeaveScene()
+    {
+        _lastPosition = Vector2.zero;
+        _lastAnimationState = 0;
+        _lastAnimationTime = 0;
+        _lastDirection = false;
+
+        _lastArmorName = string.Empty;
+        _lastWeaponName = string.Empty;
+        _lastWeaponfxName = string.Empty;
+    }
+
     public void OnUpdate()
     {
         Transform player = CoreCache.PlayerSpawn.PlayerInstance.transform;
         Transform tpo = player.GetChild(0);
         Transform graphic = tpo.GetChild(0);
-        Transform armor = graphic.Find("armor");
+
+        Animator armor = graphic.Find("armor").GetComponent<Animator>();
+        Animator weapon = graphic.Find("weapon").GetComponent<Animator>();
+        Animator weaponfx = graphic.Find("weapon_effects").GetComponent<Animator>();
 
         CheckPosition(tpo);
         CheckAnimation(armor);
         CheckDirection(tpo);
+
+        CheckArmor(armor);
+        CheckWeapon(weapon);
+        CheckWeaponEffects(weaponfx);
     }
 
     private void CheckPosition(Transform tpo)
@@ -39,10 +74,9 @@ public class PlayerHandler
         Main.Multiplayer.CompanionHandler.TempGetPosition(currPosition);
     }
 
-    private void CheckAnimation(Transform armor)
+    private void CheckAnimation(Animator armor)
     {
-        Animator anim = armor.GetComponent<Animator>();
-        var animState = anim.GetCurrentAnimatorStateInfo(0);
+        var animState = armor.GetCurrentAnimatorStateInfo(0);
         int currAnimationState = animState.nameHash;
         float currAnimationTime = animState.normalizedTime * animState.length;
 
@@ -69,6 +103,48 @@ public class PlayerHandler
 
         // Send packet
         Main.Multiplayer.CompanionHandler.TempGetDirection(currDirection);
+    }
+
+    private void CheckArmor(Animator armor)
+    {
+        string currArmorName = armor.runtimeAnimatorController?.name ?? string.Empty;
+
+        if (_lastArmorName == currArmorName)
+            return;
+
+        ModLog.Warn($"New armor: {currArmorName}");
+        _lastArmorName = currArmorName;
+
+        // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(0, currArmorName);
+    }
+
+    private void CheckWeapon(Animator weapon)
+    {
+        string currWeaponName = weapon.runtimeAnimatorController?.name ?? string.Empty;
+
+        if (_lastWeaponName == currWeaponName)
+            return;
+
+        ModLog.Warn($"New weapon: {currWeaponName}");
+        _lastWeaponName = currWeaponName;
+
+        // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(1, currWeaponName);
+    }
+
+    private void CheckWeaponEffects(Animator weaponfx)
+    {
+        string currWeaponfxName = weaponfx.runtimeAnimatorController?.name ?? string.Empty;
+
+        if (_lastWeaponfxName == currWeaponfxName)
+            return;
+
+        ModLog.Warn($"New weaponfx: {currWeaponfxName}");
+        _lastWeaponfxName = currWeaponfxName;
+
+        // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetEquipment(2, currWeaponfxName);
     }
 
     private const int PRECISION = 5;

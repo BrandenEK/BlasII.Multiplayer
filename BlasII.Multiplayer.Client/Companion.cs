@@ -5,8 +5,7 @@ namespace BlasII.Multiplayer.Client;
 
 public class Companion
 {
-    private GameObject _obj;
-
+    public GameObject GameObject { get; private set; }
     public CompanionTransform Transform { get; private set; }
     public CompanionRenderer Renderer { get; private set; }
 
@@ -14,9 +13,9 @@ public class Companion
     {
         ModLog.Info($"Creating new companion: {name}");
 
-        _obj = new GameObject(name);
+        GameObject = new GameObject(name);
 
-        Transform = new CompanionTransform(_obj.transform);
-        Renderer = new CompanionRenderer(_obj.transform);
+        Transform = new CompanionTransform(GameObject.transform);
+        Renderer = new CompanionRenderer(GameObject.transform);
     }
 }

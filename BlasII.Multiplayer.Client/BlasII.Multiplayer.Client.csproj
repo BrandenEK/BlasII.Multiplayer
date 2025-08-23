@@ -8,14 +8,14 @@
     <Product>Multiplayer</Product>
     <Authors>Damocles</Authors>
     <Company>Damocles</Company>
-    <Description>A mod for Blasphemous 2</Description>
+    <Description>Allows you to play Blasphemous 2 cooperatively with other people</Description>
     <Version>0.1.0</Version>
 
     <TargetName>MultiplayerClient</TargetName>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetName).xml</DocumentationFile>
-    <RepositoryUrl>https://github.com/Example</RepositoryUrl>
+    <RepositoryUrl>https://github.com/BrandenEK/BlasII.Multiplayer</RepositoryUrl>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
