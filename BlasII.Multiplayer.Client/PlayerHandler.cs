@@ -35,6 +35,7 @@ public class PlayerHandler
         _lastPosition = currPosition;
 
         // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetPosition(currPosition);
     }
 
     private void CheckAnimation(Transform armor)
@@ -53,6 +54,7 @@ public class PlayerHandler
         float totalTime = animState.length;
 
         // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetAnimation(currAnimation, percentTime);
     }
 
     private void CheckDirection(Transform tpo)
@@ -66,6 +68,7 @@ public class PlayerHandler
         _lastDirection = currDirection;
 
         // Send packet
+        Main.Multiplayer.CompanionHandler.TempGetDirection(currDirection);
     }
 
     private const int PRECISION = 5;

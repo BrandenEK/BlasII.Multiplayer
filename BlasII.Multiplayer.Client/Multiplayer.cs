@@ -45,7 +45,10 @@ public class Multiplayer : BlasIIMod
     {
         _companions.Clear();
 
-        CompanionHandler.OnEnterScene();
+        if (sceneName == "MainMenu")
+            return;
+
+        //CompanionHandler.OnEnterScene();
     }
 
     protected override void OnSceneUnloaded(string sceneName)
@@ -58,6 +61,7 @@ public class Multiplayer : BlasIIMod
     private void OnPlayerSpawn()
     {
         ModLog.Warn("Player was spawned");
+        CompanionHandler.OnEnterScene();
     }
 
     private void SpawnTest()
