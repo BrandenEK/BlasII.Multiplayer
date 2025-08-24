@@ -13,7 +13,12 @@ internal class Core
     {
         Logger.AddLoggers(new ConsoleLogger(TITLE), new FileLogger(Environment.CurrentDirectory));
 
+        var room = new RoomManager();
+
         var server = new NetworkServer(new ClassicSerializer());
+        server.OnClientConnected += room.OnClientConnected;
+        server.OnClientDisconnected += room.OnClientDisconnected;
+        server.OnPacketReceived += room.OnPacketReceived;
 
         try
         {
