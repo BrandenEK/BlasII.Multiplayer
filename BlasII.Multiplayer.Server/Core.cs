@@ -9,11 +9,7 @@ internal class Core
 {
     static void Main(string[] args)
     {
-        Logger.AddLoggers(
-        [
-            new ConsoleLogger(TITLE),
-            new FileLogger(Environment.CurrentDirectory)
-        ]);
+        Logger.AddLoggers(new ConsoleLogger(TITLE), new FileLogger(Environment.CurrentDirectory));
 
         Logger.Warn("This is a test warning");
 

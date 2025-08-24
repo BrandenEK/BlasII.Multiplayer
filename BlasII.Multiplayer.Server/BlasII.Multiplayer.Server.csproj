@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Basalt.Framework.Logging" Version="1.1.1" />
+    <PackageReference Include="Basalt.Framework.Logging" Version="2.0.0" />
   </ItemGroup>
 
 </Project>
