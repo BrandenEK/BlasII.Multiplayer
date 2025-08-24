@@ -1,5 +1,7 @@
 ﻿using Basalt.Framework.Logging;
 using Basalt.Framework.Logging.Standard;
+using Basalt.Framework.Networking.Serializers;
+using Basalt.Framework.Networking.Server;
 using System;
 using System.Threading;
 
@@ -11,11 +13,28 @@ internal class Core
     {
         Logger.AddLoggers(new ConsoleLogger(TITLE), new FileLogger(Environment.CurrentDirectory));
 
-        Logger.Warn("This is a test warning");
+        var server = new NetworkServer(new ClassicSerializer());
+
+        try
+        {
+            server.Start(33002);
+            Logger.Info($"Server started at {server.Ip}:{server.Port}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Fatal(ex);
+            return;
+        }
 
         while (true)
         {
             Thread.Sleep(100);
+
+            if (!server.IsActive)
+                return;
+
+            server.Receive();
+            server.Update();
         }
     }
 
