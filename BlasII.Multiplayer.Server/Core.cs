@@ -1,5 +1,8 @@
 ﻿using Basalt.Framework.Logging;
 using Basalt.Framework.Logging.Standard;
+using Basalt.Framework.Networking;
+using Basalt.Framework.Networking.Serializers;
+using Basalt.Framework.Networking.Server;
 using System;
 using System.Threading;
 
@@ -11,13 +14,58 @@ internal class Core
     {
         Logger.AddLoggers(new ConsoleLogger(TITLE), new FileLogger(Environment.CurrentDirectory));
 
-        Logger.Warn("This is a test warning");
+        var room = new RoomManager();
 
+        var server = new NetworkServer(new ClassicSerializer());
+        server.OnClientConnected += room.OnClientConnected;
+        server.OnClientDisconnected += room.OnClientDisconnected;
+        server.OnPacketReceived += room.OnPacketReceived;
+
+        try
+        {
+            server.Start(PORT);
+            Logger.Info($"Server started at {server.Ip}:{server.Port}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Fatal($"Encountered an error when starting the server - {ex}");
+            return;
+        }
+
+        try
+        {
+            ReadLoop(server);
+        }
+        catch (Exception ex)
+        {
+            Logger.Fatal($"Encountered an error when updating the server - {ex}");
+            return;
+        }
+    }
+
+    static void ReadLoop(NetworkServer server)
+    {
         while (true)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(INTERVAL_MS);
+
+            if (!server.IsActive)
+                return;
+
+            try
+            {
+                server.Receive();
+            }
+            catch (NetworkException ex)
+            {
+                Logger.Error($"Encountered an error when receiving data - {ex}");
+            }
+
+            server.Update();
         }
     }
 
     private const string TITLE = "Blasphemous 2 Multiplayer Server";
+    private const int PORT = 33002;
+    private const int INTERVAL_MS = 100;
 }
