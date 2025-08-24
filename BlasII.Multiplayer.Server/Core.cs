@@ -1,5 +1,6 @@
 ﻿using Basalt.Framework.Logging;
 using Basalt.Framework.Logging.Standard;
+using Basalt.Framework.Networking;
 using Basalt.Framework.Networking.Serializers;
 using Basalt.Framework.Networking.Server;
 using System;
@@ -22,26 +23,36 @@ internal class Core
 
         try
         {
-            server.Start(33002);
+            server.Start(PORT);
             Logger.Info($"Server started at {server.Ip}:{server.Port}");
         }
         catch (Exception ex)
         {
-            Logger.Fatal(ex);
+            Logger.Fatal($"Encountered an error when starting the server - {ex}");
             return;
         }
 
         while (true)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(INTERVAL_MS);
 
             if (!server.IsActive)
                 return;
 
-            server.Receive();
+            try
+            {
+                server.Receive();
+            }
+            catch (NetworkException ex)
+            {
+                Logger.Error($"Encountered an error when receiving data - {ex}");
+            }
+
             server.Update();
         }
     }
 
     private const string TITLE = "Blasphemous 2 Multiplayer Server";
+    private const int PORT = 33002;
+    private const int INTERVAL_MS = 100;
 }

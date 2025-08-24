@@ -7,7 +7,7 @@ namespace BlasII.Multiplayer.Server;
 
 public class RoomManager
 {
-    private readonly Dictionary<string, PlayerInfo> _players;
+    private readonly Dictionary<string, PlayerInfo> _players = [];
 
     public void OnClientConnected(string ip)
     {
