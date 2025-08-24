@@ -32,6 +32,19 @@ internal class Core
             return;
         }
 
+        try
+        {
+            ReadLoop(server);
+        }
+        catch (Exception ex)
+        {
+            Logger.Fatal($"Encountered an error when updating the server - {ex}");
+            return;
+        }
+    }
+
+    static void ReadLoop(NetworkServer server)
+    {
         while (true)
         {
             Thread.Sleep(INTERVAL_MS);
