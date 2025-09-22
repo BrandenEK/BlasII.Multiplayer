@@ -1,9 +1,9 @@
 ﻿using Basalt.Framework.Networking;
 using Basalt.Framework.Networking.Serializers;
 using Basalt.Framework.Networking.Streams;
-using BlasII.Multiplayer.Client.Packets;
+using BlasII.Multiplayer.Core.Packets;
 
-namespace BlasII.Multiplayer.Client.PacketSerializers;
+namespace BlasII.Multiplayer.Core.PacketSerializers;
 
 public class AnimationPacketSerializer : IPacketSerializer
 {

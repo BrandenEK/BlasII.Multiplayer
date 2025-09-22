@@ -1,19 +1,20 @@
 ﻿using Basalt.Framework.Networking;
 using Basalt.Framework.Networking.Serializers;
 using Basalt.Framework.Networking.Streams;
-using BlasII.Multiplayer.Client.Packets;
+using BlasII.Multiplayer.Core.Packets;
 
-namespace BlasII.Multiplayer.Client.PacketSerializers;
+namespace BlasII.Multiplayer.Core.PacketSerializers;
 
-public class DirectionPacketSerializer : IPacketSerializer
+public class EquipmentPacketSerializer : IPacketSerializer
 {
     public byte[] Serialize(BasePacket packet)
     {
-        DirectionPacket p = (DirectionPacket)packet;
+        EquipmentPacket p = (EquipmentPacket)packet;
 
         var stream = new OutStream();
         stream.Write_string(p.Name);
-        stream.Write_bool(p.FacingDirection);
+        stream.Write_byte(p.Type);
+        stream.Write_string(p.Equipment);
 
         return stream;
     }
@@ -23,8 +24,9 @@ public class DirectionPacketSerializer : IPacketSerializer
         var stream = new InStream(data);
 
         string name = stream.Read_string();
-        bool direction = stream.Read_bool();
+        byte type = stream.Read_byte();
+        string equipment = stream.Read_string();
 
-        return new DirectionPacket(name, direction);
+        return new EquipmentPacket(name, type, equipment);
     }
 }
