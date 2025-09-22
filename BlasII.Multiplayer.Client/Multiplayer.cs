@@ -18,6 +18,7 @@ public class Multiplayer : BlasIIMod
     public PlayerHandler PlayerHandler { get; }
 
     public AnimationStorage AnimationStorage { get; }
+    public IconStorage IconStorage { get; }
 
     internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
     {
@@ -31,6 +32,7 @@ public class Multiplayer : BlasIIMod
         PlayerHandler = new PlayerHandler(_client);
 
         AnimationStorage = new AnimationStorage();
+        IconStorage = new IconStorage(FileHandler);
     }
 
     protected override void OnInitialize()
