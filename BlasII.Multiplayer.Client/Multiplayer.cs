@@ -1,5 +1,4 @@
-﻿using Basalt.Framework.Networking;
-using Basalt.Framework.Networking.Client;
+﻿using Basalt.Framework.Networking.Client;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
 using BlasII.Multiplayer.Client.Storages;
@@ -47,7 +46,7 @@ public class Multiplayer : BlasIIMod
 
         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Equals))
         {
-            NetworkHandler.Connect("localhost", 33002);
+            NetworkHandler.Connect(SERVER, PORT);
         }
     }
 
@@ -76,4 +75,10 @@ public class Multiplayer : BlasIIMod
     {
         ModLog.Info($"Disconnected from {ip}");
     }
+
+    private const string SERVER = "localhost";
+    private const int PORT = 33002;
+    private const string PLAYER = "Damocles";
+    private const string ROOM = "TEST";
+    private const int TEAM = 1;
 }
