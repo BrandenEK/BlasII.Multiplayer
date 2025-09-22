@@ -18,7 +18,6 @@ public class NetworkHandler
         try
         {
             _client.Connect(ip, port);
-            ModLog.Info($"Client connected to {ip}:{port}");
         }
         catch (System.Exception ex)
         {

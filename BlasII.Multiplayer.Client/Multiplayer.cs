@@ -23,7 +23,6 @@ public class Multiplayer : BlasIIMod
         _client = new NetworkClient(new CoreSerializer());
         _client.OnClientConnected += TEMP_OnConnect;
         _client.OnClientDisconnected += TEMP_OnDisconnect;
-        _client.OnPacketReceived += TEMP_OnReceive;
 
         CompanionHandler = new CompanionHandler(_client);
         NetworkHandler = new NetworkHandler(_client);
@@ -67,18 +66,14 @@ public class Multiplayer : BlasIIMod
         PlayerHandler.OnLeaveScene();
     }
 
+    // TODO: move these to the console popup + log
     private void TEMP_OnConnect(string ip)
     {
-        ModLog.Warn("Now connected");
+        ModLog.Info($"Connected to {ip}");
     }
 
     private void TEMP_OnDisconnect(string ip)
     {
-        ModLog.Warn("Now disconnected");
-    }
-
-    private void TEMP_OnReceive(BasePacket packet)
-    {
-        //ModLog.Error("Received a packet");
+        ModLog.Info($"Disconnected from {ip}");
     }
 }
