@@ -87,4 +87,6 @@ public class Multiplayer : BlasIIMod
     private const string PLAYER = "Damocles";
     private const string ROOM = "TEST";
     private const int TEAM = 1;
+
+    public static string PlayerName { get; } = PLAYER; // TEMP !!
 }

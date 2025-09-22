@@ -1,136 +1,119 @@
 ﻿using Basalt.Framework.Networking;
 using Basalt.Framework.Networking.Client;
+using BlasII.Framework.UI;
 using BlasII.ModdingAPI;
-using BlasII.Multiplayer.Client.Components;
+using BlasII.ModdingAPI.Utils;
+using BlasII.Multiplayer.Core.Packets;
+using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components.UI;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace BlasII.Multiplayer.Client.Nametags;
 
 public class NametagHandler
 {
-    private readonly Dictionary<string, UIPixelTextWithShadow> _nametags = [];
+    private readonly Dictionary<string, UIPixelTextWithShadow> _nametags;
+    private readonly ObjectCache<Camera> _camCache;
 
     public NametagHandler(NetworkClient client)
     {
+        _nametags = [];
+        _camCache = new ObjectCache<Camera>(() => Object.FindObjectsOfType<Camera>().First(x => x.name == "Main Camera"));
+
         client.OnPacketReceived += OnPacketReceived;
     }
 
     public void OnEnterScene()
     {
-        RemoveAllCompanions();
+        RemoveAllNametags();
     }
 
     public void OnLeaveScene()
     {
-        RemoveAllCompanions();
+        RemoveAllNametags();
     }
 
     public void OnUpdate()
     {
-        foreach (var companion in _companions.Values)
-            companion.Renderer.OnUpdate();
+        // TODO: only if connected
+        // On disconnect, destroy all
+
+        OnReceivePosition(Multiplayer.PlayerName, CoreCache.PlayerSpawn.PlayerInstance.transform.position);
     }
 
     private void OnPacketReceived(BasePacket packet)
     {
-        ModLog.Info($"Received packet of type {packet.GetType().Name}");
-
         if (packet is PositionPacket position)
             OnReceivePosition(position.Name, new Vector2(position.X, position.Y));
 
-        if (packet is AnimationPacket animation)
-            OnReceiveAnimation(animation.Name, animation.State, animation.Time, animation.Length);
-
-        if (packet is DirectionPacket direction)
-            OnReceiveDirection(direction.Name, direction.FacingDirection);
-
-        if (packet is EquipmentPacket equipment)
-            OnReceiveEquipment(equipment.Name, equipment.Type, equipment.Equipment);
-
-        // Should I ensure the companion already exists from the scenepacket or just create them if they dont exist yet ??
+        // Should I ensure the nametag already exists from the scenepacket or just create them if they dont exist yet ??
     }
 
     private void OnReceivePosition(string name, Vector2 position)
     {
-        if (!_companions.TryGetValue(name, out Companion companion))
+        if (!_nametags.TryGetValue(name, out UIPixelTextWithShadow nametag))
         {
-            companion = AddCompanion(name);
+            nametag = AddNametag(name);
             //ModLog.Error($"Received position from {name} who does not exist");
             //return;
         }
 
-        companion.Transform.UpdatePosition(position);
+        Vector3 viewPos = _camCache.Value.WorldToViewportPoint(position + Vector2.up * NAMETAG_OFFSET);
+        nametag.shadowText.rectTransform.anchorMin = viewPos;
+        nametag.shadowText.rectTransform.anchorMax = viewPos;
+        nametag.shadowText.rectTransform.anchoredPosition = Vector2.zero;
+
+        ModLog.Warn("Updating positon to " + viewPos);
     }
 
-    private void OnReceiveAnimation(string name, int state, float time, float length)
+    private UIPixelTextWithShadow AddNametag(string name)
     {
-        if (!_companions.TryGetValue(name, out Companion companion))
+        if (_nametags.TryGetValue(name, out UIPixelTextWithShadow nametag))
         {
-            companion = AddCompanion(name);
-            //ModLog.Error($"Received position from {name} who does not exist");
-            //return;
+            ModLog.Warn($"Failed to add nametag {name} because they already exist");
+            return nametag;
         }
 
-        companion.Renderer.UpdateAnim(state, time, length);
+        ModLog.Info($"Adding nametag {name}");
+
+        nametag = UIModder.Create(new RectCreationOptions()
+        {
+            Name = name + "_tag",
+            Parent = UIModder.Parents.GameLogic,
+            Size = new Vector2(100, 50),
+        }).AddText(new TextCreationOptions()
+        {
+            Alignment = Il2CppTMPro.TextAlignmentOptions.Bottom,
+            Color = new Color32(0xAB, 0x9A, 0x3F, 0xFF),
+            Contents = name,
+            FontSize = 48,
+        }).AddShadow();
+
+        _nametags.Add(name, nametag);
+        return nametag;
     }
 
-    private void OnReceiveDirection(string name, bool direction)
+    private void RemoveNametag(string name)
     {
-        if (!_companions.TryGetValue(name, out Companion companion))
+        if (!_nametags.TryGetValue(name, out UIPixelTextWithShadow nametag))
         {
-            companion = AddCompanion(name);
-            //ModLog.Error($"Received position from {name} who does not exist");
-            //return;
-        }
-
-        companion.Transform.UpdateDirection(direction);
-    }
-
-    private void OnReceiveEquipment(string name, byte type, string equipment)
-    {
-        if (!_companions.TryGetValue(name, out Companion companion))
-        {
-            companion = AddCompanion(name);
-            //ModLog.Error($"Received position from {name} who does not exist");
-            //return;
-        }
-
-        companion.Renderer.UpdateEquipment(type, equipment);
-    }
-
-    private Companion AddCompanion(string name)
-    {
-        if (_companions.TryGetValue(name, out Companion companion))
-        {
-            ModLog.Warn($"Failed to add companion {name} because they already exist");
-            return companion;
-        }
-
-        ModLog.Info($"Adding companion {name}");
-        companion = new Companion(name);
-
-        _companions.Add(name, companion);
-        return companion;
-    }
-
-    private void RemoveCompanion(string name)
-    {
-        if (!_companions.TryGetValue(name, out Companion companion))
-        {
-            ModLog.Warn($"Failed to remove companion {name} because they don't exist");
+            ModLog.Warn($"Failed to remove nametag {name} because they don't exist");
             return;
         }
 
-        ModLog.Info($"Removing companion {name}");
-        companion.Destroy();
-        _companions.Remove(name);
+        ModLog.Info($"Removing nametag {name}");
+        Object.Destroy(nametag.gameObject);
+        _nametags.Remove(name);
     }
 
-    private void RemoveAllCompanions()
+    private void RemoveAllNametags()
     {
-        foreach (var companion in _companions.Values)
-            companion.Destroy();
-        _companions.Clear();
+        foreach (var nametag in _nametags.Values)
+            Object.Destroy(nametag.gameObject);
+        _nametags.Clear();
     }
+
+    private const float NAMETAG_OFFSET = 2.9f;
 }
