@@ -5,12 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Basalt.Framework.Networking" Condition="'$(TargetFramework)' == 'net6.0'">
-      <HintPath>..\..\..\basalt\Basalt.Framework.Networking\Basalt.Framework.Networking\bin\Debug\net6.0\Basalt.Framework.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="Basalt.Framework.Networking" Condition="'$(TargetFramework)' == 'net8.0'">
-      <HintPath>..\..\..\basalt\Basalt.Framework.Networking\Basalt.Framework.Networking\bin\Debug\net8.0\Basalt.Framework.Networking.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Basalt.Framework.Networking" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

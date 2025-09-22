@@ -49,7 +49,7 @@ public class RoomManager
 
     public void OnPacketReceived(string ip, BasePacket packet)
     {
-        Logger.Debug($"Received packet of type {packet.GetType().Name}");
+        Logger.Debug($"Received packet of type {packet.GetType().Name} from {ip}");
 
         if (!_players.TryGetValue(ip, out PlayerInfo player))
         {
