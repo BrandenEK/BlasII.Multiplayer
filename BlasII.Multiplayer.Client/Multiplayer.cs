@@ -1,11 +1,9 @@
 ﻿using Basalt.Framework.Networking;
 using Basalt.Framework.Networking.Client;
-using Basalt.Framework.Networking.Serializers;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
 using BlasII.Multiplayer.Client.Storages;
-using BlasII.Multiplayer.Core.Packets;
-using BlasII.Multiplayer.Core.PacketSerializers;
+using BlasII.Multiplayer.Core;
 using Il2CppTGK.Game;
 
 namespace BlasII.Multiplayer.Client;
@@ -22,13 +20,7 @@ public class Multiplayer : BlasIIMod
 
     internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
     {
-        var serializer = new ClassicSerializer()
-            .AddPacketSerializer<PositionPacket>(0, new PositionPacketSerializer())
-            .AddPacketSerializer<AnimationPacket>(1, new AnimationPacketSerializer())
-            .AddPacketSerializer<DirectionPacket>(2, new DirectionPacketSerializer())
-            .AddPacketSerializer<EquipmentPacket>(3, new EquipmentPacketSerializer());
-
-        _client = new NetworkClient(serializer);
+        _client = new NetworkClient(new CoreSerializer());
         _client.OnClientConnected += TEMP_OnConnect;
         _client.OnClientDisconnected += TEMP_OnDisconnect;
         _client.OnPacketReceived += TEMP_OnReceive;
