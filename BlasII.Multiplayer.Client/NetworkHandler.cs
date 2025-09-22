@@ -2,6 +2,7 @@
 using Basalt.Framework.Networking.Client;
 using BlasII.ModdingAPI;
 using BlasII.Multiplayer.Client.Models;
+using BlasII.Multiplayer.Core.Extensions;
 using BlasII.Multiplayer.Core.Packets;
 
 namespace BlasII.Multiplayer.Client;
@@ -15,6 +16,7 @@ public class NetworkHandler
     public NetworkHandler(NetworkClient client)
     {
         _client = client;
+        _client.OnPacketReceived += OnPacketReceived;
     }
 
     public void Connect(string ip, int port, RoomInfo room)
@@ -38,10 +40,10 @@ public class NetworkHandler
             return;
 
         if (packet is INamedPacket p)
-        {
-            ModLog.Info(packet.GetType().Name + " is named");
             p.Name = _currentRoom.PlayerName;
-        }
+
+        if (LOG_TRAFFIC)
+            ModLog.Debug($"SENDING {packet.Stringify()}");
 
         _client.Send(packet);
     }
@@ -62,4 +64,12 @@ public class NetworkHandler
 
         _client.Update();
     }
+
+    private void OnPacketReceived(BasePacket packet)
+    {
+        if (LOG_TRAFFIC)
+            ModLog.Debug($"RECEIVING {packet.Stringify()}");
+    }
+
+    private const bool LOG_TRAFFIC = true;
 }

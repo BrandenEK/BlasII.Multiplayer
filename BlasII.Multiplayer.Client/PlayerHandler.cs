@@ -87,9 +87,7 @@ public class PlayerHandler
         if (_lastPosition == currPosition)
             return;
 
-        ModLog.Warn($"New position: {currPosition}");
         _lastPosition = currPosition;
-
         Main.Multiplayer.NetworkHandler.Send(new PositionPacket(null, x, y));
     }
 
@@ -102,11 +100,9 @@ public class PlayerHandler
         if (_lastAnimationState == currAnimationState && _lastAnimationTime < currAnimationTime)
             return;
 
-        ModLog.Warn($"New animation: {currAnimationState}");
         _lastAnimationState = currAnimationState;
         _lastAnimationTime = currAnimationTime;
         _lastAnimationLength = animState.length;
-
         Main.Multiplayer.NetworkHandler.Send(new AnimationPacket(null, currAnimationState, currAnimationTime, animState.length));
     }
 
@@ -117,9 +113,7 @@ public class PlayerHandler
         if (_lastDirection == currDirection)
             return;
 
-        ModLog.Warn($"New direction: {currDirection}");
         _lastDirection = currDirection;
-
         Main.Multiplayer.NetworkHandler.Send(new DirectionPacket(null, currDirection));
     }
 
@@ -130,9 +124,7 @@ public class PlayerHandler
         if (_lastArmorName == currArmorName)
             return;
 
-        ModLog.Warn($"New armor: {currArmorName}");
         _lastArmorName = currArmorName;
-
         Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 0, currArmorName));
     }
 
@@ -143,9 +135,7 @@ public class PlayerHandler
         if (_lastWeaponName == currWeaponName)
             return;
 
-        ModLog.Warn($"New weapon: {currWeaponName}");
         _lastWeaponName = currWeaponName;
-
         Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 1, currWeaponName));
     }
 
@@ -156,9 +146,7 @@ public class PlayerHandler
         if (_lastWeaponfxName == currWeaponfxName)
             return;
 
-        ModLog.Warn($"New weaponfx: {currWeaponfxName}");
         _lastWeaponfxName = currWeaponfxName;
-
         Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 2, currWeaponfxName));
     }
 
