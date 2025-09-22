@@ -1,6 +1,7 @@
 ﻿using Basalt.Framework.Networking.Client;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
+using BlasII.Multiplayer.Client.Nametags;
 using BlasII.Multiplayer.Client.Storages;
 using BlasII.Multiplayer.Core;
 using Il2CppTGK.Game;
@@ -12,6 +13,7 @@ public class Multiplayer : BlasIIMod
     private readonly NetworkClient _client;
 
     public CompanionHandler CompanionHandler { get; }
+    public NametagHandler NametagHandler { get; }
     public NetworkHandler NetworkHandler { get; }
     public PlayerHandler PlayerHandler { get; }
 
@@ -24,6 +26,7 @@ public class Multiplayer : BlasIIMod
         _client.OnClientDisconnected += TEMP_OnDisconnect;
 
         CompanionHandler = new CompanionHandler(_client);
+        NametagHandler = new NametagHandler(_client);
         NetworkHandler = new NetworkHandler(_client);
         PlayerHandler = new PlayerHandler(_client);
 
@@ -41,6 +44,7 @@ public class Multiplayer : BlasIIMod
             return;
 
         CompanionHandler.OnUpdate();
+        NametagHandler.OnUpdate();
         NetworkHandler.OnUpdate();
         PlayerHandler.OnUpdate();
 
@@ -56,12 +60,14 @@ public class Multiplayer : BlasIIMod
             return;
 
         CompanionHandler.OnEnterScene();
+        NametagHandler.OnEnterScene();
         PlayerHandler.OnEnterScene();
     }
 
     protected override void OnSceneUnloaded(string sceneName)
     {
         CompanionHandler.OnLeaveScene();
+        NametagHandler.OnLeaveScene();
         PlayerHandler.OnLeaveScene();
     }
 
