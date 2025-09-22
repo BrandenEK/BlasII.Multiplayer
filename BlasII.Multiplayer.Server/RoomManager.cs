@@ -23,7 +23,7 @@ public class RoomManager
         server.OnPacketReceived += OnPacketReceived;
     }
 
-    public void OnClientConnected(string ip)
+    private void OnClientConnected(string ip)
     {
         if (_players.ContainsKey(ip))
         {
@@ -35,7 +35,7 @@ public class RoomManager
         _players.Add(ip, new PlayerInfo($"Player {_players.Count + 1}"));
     }
 
-    public void OnClientDisconnected(string ip)
+    private void OnClientDisconnected(string ip)
     {
         if (!_players.ContainsKey(ip))
         {
@@ -47,7 +47,7 @@ public class RoomManager
         _players.Remove(ip);
     }
 
-    public void OnPacketReceived(string ip, BasePacket packet)
+    private void OnPacketReceived(string ip, BasePacket packet)
     {
         Logger.Debug($"Received packet of type {packet.GetType().Name} from {ip}");
 
@@ -59,6 +59,8 @@ public class RoomManager
 
         // Split this up somehow
         // Wont need to reassign the packet once name is added to everything
+
+        // TODO: when entering a new scene, also send all status packets
 
         if (packet is PositionPacket position)
         {
