@@ -14,15 +14,18 @@ namespace BlasII.Multiplayer.Client.Nametags;
 
 public class NametagHandler
 {
+    private readonly NetworkClient _client;
     private readonly Dictionary<string, UIPixelTextWithShadow> _nametags;
     private readonly ObjectCache<Camera> _camCache;
 
     public NametagHandler(NetworkClient client)
     {
+        _client = client;
         _nametags = [];
         _camCache = new ObjectCache<Camera>(() => Object.FindObjectsOfType<Camera>().First(x => x.name == "Main Camera"));
 
         client.OnPacketReceived += OnPacketReceived;
+        client.OnClientDisconnected += OnClientDisconnected;
     }
 
     public void OnEnterScene()
@@ -37,10 +40,17 @@ public class NametagHandler
 
     public void OnUpdate()
     {
-        // TODO: only if connected
-        // On disconnect, destroy all
+        // TODO: remove nametag when someone leaves room
+
+        if (!_client.IsActive)
+            return;
 
         OnReceivePosition(Multiplayer.PlayerName, CoreCache.PlayerSpawn.PlayerInstance.transform.position);
+    }
+
+    private void OnClientDisconnected(string ip)
+    {
+        RemoveAllNametags();
     }
 
     private void OnPacketReceived(BasePacket packet)
