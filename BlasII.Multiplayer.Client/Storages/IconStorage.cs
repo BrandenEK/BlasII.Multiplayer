@@ -13,7 +13,6 @@ public class IconStorage
     /// </summary>
     public IconStorage(FileHandler file)
     {
-        ModLog.Info("Loading multiplayer status icons");
         file.LoadDataAsFixedSpritesheet("mpstatus.png", new Vector2(22, 22), out _statusSprites);
     }
 
