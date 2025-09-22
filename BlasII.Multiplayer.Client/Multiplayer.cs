@@ -46,7 +46,7 @@ public class Multiplayer : BlasIIMod
 
         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Equals))
         {
-            NetworkHandler.Connect(SERVER, PORT);
+            NetworkHandler.Connect(SERVER, PORT, new Models.RoomInfo(ROOM, PLAYER, TEAM));
         }
     }
 
