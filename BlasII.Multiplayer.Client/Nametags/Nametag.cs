@@ -28,6 +28,9 @@ public class Nametag
 
     public void UpdateProperties(Camera camera)
     {
+        if (_text == null)
+            return;
+
         Vector3 viewPos = camera.WorldToViewportPoint(Position + Vector3.up * NAMETAG_OFFSET);
         _text.shadowText.rectTransform.anchorMin = viewPos;
         _text.shadowText.rectTransform.anchorMax = viewPos;
@@ -36,6 +39,9 @@ public class Nametag
 
     public void Destroy()
     {
+        if (_text == null || _text.gameObject == null)
+            return;
+
         Object.Destroy(_text.gameObject);
     }
 

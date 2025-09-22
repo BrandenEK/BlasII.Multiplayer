@@ -1,6 +1,7 @@
 ﻿using Basalt.Framework.Networking.Client;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
+using BlasII.Multiplayer.Client.Displays;
 using BlasII.Multiplayer.Client.Nametags;
 using BlasII.Multiplayer.Client.Storages;
 using BlasII.Multiplayer.Core;
@@ -17,7 +18,10 @@ public class Multiplayer : BlasIIMod
     public NetworkHandler NetworkHandler { get; }
     public PlayerHandler PlayerHandler { get; }
 
+    public StatusDisplay StatusDisplay { get; }
+
     public AnimationStorage AnimationStorage { get; }
+    public IconStorage IconStorage { get; }
 
     internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
     {
@@ -30,7 +34,10 @@ public class Multiplayer : BlasIIMod
         NetworkHandler = new NetworkHandler(_client);
         PlayerHandler = new PlayerHandler(_client);
 
+        StatusDisplay = new StatusDisplay(_client);
+
         AnimationStorage = new AnimationStorage();
+        IconStorage = new IconStorage(FileHandler);
     }
 
     protected override void OnInitialize()
@@ -47,6 +54,8 @@ public class Multiplayer : BlasIIMod
         NametagHandler.OnUpdate();
         NetworkHandler.OnUpdate();
         PlayerHandler.OnUpdate();
+
+        StatusDisplay.OnUpdate();
 
         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Equals))
         {
