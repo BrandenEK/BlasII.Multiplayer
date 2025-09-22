@@ -25,7 +25,7 @@ public class Multiplayer : BlasIIMod
         _client.OnClientDisconnected += TEMP_OnDisconnect;
         _client.OnPacketReceived += TEMP_OnReceive;
 
-        CompanionHandler = new CompanionHandler();
+        CompanionHandler = new CompanionHandler(_client);
         NetworkHandler = new NetworkHandler(_client);
         PlayerHandler = new PlayerHandler();
 

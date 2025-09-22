@@ -1,5 +1,8 @@
-﻿using BlasII.ModdingAPI;
+﻿using Basalt.Framework.Networking;
+using Basalt.Framework.Networking.Client;
+using BlasII.ModdingAPI;
 using BlasII.Multiplayer.Client.Components;
+using BlasII.Multiplayer.Core.Packets;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +11,11 @@ namespace BlasII.Multiplayer.Client;
 public class CompanionHandler
 {
     private readonly Dictionary<string, Companion> _companions = [];
+
+    public CompanionHandler(NetworkClient client)
+    {
+        client.OnPacketReceived += OnPacketReceived;
+    }
 
     public void OnEnterScene()
     {
@@ -25,16 +33,84 @@ public class CompanionHandler
             companion.Renderer.OnUpdate();
     }
 
-    private void AddCompanion(string name)
+    private void OnPacketReceived(BasePacket packet)
     {
-        if (_companions.ContainsKey(name))
+        if (packet is PositionPacket position)
+            OnReceivePosition(position.Name, new Vector2(position.X, position.Y));
+
+        if (packet is AnimationPacket animation)
+            OnReceiveAnimation(animation.Name, animation.State, animation.Time, animation.Length);
+
+        if (packet is DirectionPacket direction)
+            OnReceiveDirection(direction.Name, direction.FacingDirection);
+
+        if (packet is EquipmentPacket equipment)
+            OnReceiveEquipment(equipment.Name, equipment.Type, equipment.Equipment);
+
+        // Should I ensure the companion already exists from the scenepacket or just create them if they dont exist yet ??
+    }
+
+    private void OnReceivePosition(string name, Vector2 position)
+    {
+        if (!_companions.TryGetValue(name, out Companion companion))
+        {
+            companion = AddCompanion(name);
+            //ModLog.Error($"Received position from {name} who does not exist");
+            //return;
+        }
+
+        companion.Transform.UpdatePosition(position);
+    }
+
+    private void OnReceiveAnimation(string name, int state, float time, float length)
+    {
+        if (!_companions.TryGetValue(name, out Companion companion))
+        {
+            companion = AddCompanion(name);
+            //ModLog.Error($"Received position from {name} who does not exist");
+            //return;
+        }
+
+        companion.Renderer.UpdateAnim(state, time, length);
+    }
+
+    private void OnReceiveDirection(string name, bool direction)
+    {
+        if (!_companions.TryGetValue(name, out Companion companion))
+        {
+            companion = AddCompanion(name);
+            //ModLog.Error($"Received position from {name} who does not exist");
+            //return;
+        }
+
+        companion.Transform.UpdateDirection(direction);
+    }
+
+    private void OnReceiveEquipment(string name, byte type, string equipment)
+    {
+        if (!_companions.TryGetValue(name, out Companion companion))
+        {
+            companion = AddCompanion(name);
+            //ModLog.Error($"Received position from {name} who does not exist");
+            //return;
+        }
+
+        companion.Renderer.UpdateEquipment(type, equipment);
+    }
+
+    private Companion AddCompanion(string name)
+    {
+        if (_companions.TryGetValue(name, out Companion companion))
         {
             ModLog.Warn($"Failed to add companion {name} because they already exist");
-            return;
+            return companion;
         }
 
         ModLog.Info($"Adding companion {name}");
-        _companions.Add(name, new Companion(name));
+        companion = new Companion(name);
+
+        _companions.Add(name, companion);
+        return companion;
     }
 
     private void RemoveCompanion(string name)
@@ -55,40 +131,5 @@ public class CompanionHandler
         foreach (var companion in _companions.Values)
             companion.Destroy();
         _companions.Clear();
-    }
-
-    private Companion GetCompanionByName(string name) // Remove this and just check for companion with TryGetValue
-    {
-        // TODO: check if they exist or not
-
-        if (!_companions.ContainsKey(name))
-            AddCompanion(name);
-
-        return _companions[name];
-    }
-
-
-    public void TempGetPosition(Vector2 position)
-    {
-        Companion c = GetCompanionByName("Test");
-        c.Transform.UpdatePosition(position + Vector2.right * 2);
-    }
-
-    public void TempGetAnimation(int state, float time, float length)
-    {
-        Companion c = GetCompanionByName("Test");
-        c.Renderer.UpdateAnim(state, time, length);
-    }
-
-    public void TempGetDirection(bool direction)
-    {
-        Companion c = GetCompanionByName("Test");
-        c.Transform.UpdateDirection(direction);
-    }
-
-    public void TempGetEquipment(byte type, string name)
-    {
-        Companion c = GetCompanionByName("Test");
-        c.Renderer.UpdateEquipment(type, name);
     }
 }
