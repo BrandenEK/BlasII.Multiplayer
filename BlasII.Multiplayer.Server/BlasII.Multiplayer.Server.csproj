@@ -7,16 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="Basalt.Framework.Logging" Version="2.0.0" />
+    <PackageReference Include="Basalt.Framework.Networking" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BlasII.Multiplayer.Core\BlasII.Multiplayer.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Basalt.Framework.Networking">
-      <HintPath>..\..\..\basalt\Basalt.Framework.Networking\Basalt.Framework.Networking\bin\Debug\net8.0\Basalt.Framework.Networking.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

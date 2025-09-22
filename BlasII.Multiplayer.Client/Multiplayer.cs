@@ -25,9 +25,9 @@ public class Multiplayer : BlasIIMod
         _client.OnClientDisconnected += TEMP_OnDisconnect;
         _client.OnPacketReceived += TEMP_OnReceive;
 
-        CompanionHandler = new CompanionHandler();
+        CompanionHandler = new CompanionHandler(_client);
         NetworkHandler = new NetworkHandler(_client);
-        PlayerHandler = new PlayerHandler();
+        PlayerHandler = new PlayerHandler(_client);
 
         AnimationStorage = new AnimationStorage();
     }
@@ -79,6 +79,6 @@ public class Multiplayer : BlasIIMod
 
     private void TEMP_OnReceive(BasePacket packet)
     {
-        ModLog.Error("Received a packet");
+        //ModLog.Error("Received a packet");
     }
 }

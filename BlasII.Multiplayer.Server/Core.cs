@@ -14,12 +14,8 @@ internal class Core
     {
         Logger.AddLoggers(new ConsoleLogger(TITLE), new FileLogger(Environment.CurrentDirectory));
 
-        var room = new RoomManager();
-
         var server = new NetworkServer(new CoreSerializer());
-        server.OnClientConnected += room.OnClientConnected;
-        server.OnClientDisconnected += room.OnClientDisconnected;
-        server.OnPacketReceived += room.OnPacketReceived;
+        var room = new RoomManager(server);
 
         try
         {
@@ -67,5 +63,5 @@ internal class Core
 
     private const string TITLE = "Blasphemous 2 Multiplayer Server";
     private const int PORT = 33002;
-    private const int INTERVAL_MS = 100;
+    private const int INTERVAL_MS = 10;
 }
