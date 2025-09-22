@@ -10,21 +10,23 @@ namespace BlasII.Multiplayer.Client;
 
 public class Multiplayer : BlasIIMod
 {
-    public NetworkClient NetworkClient { get; }
+    private readonly NetworkClient _client;
 
     public CompanionHandler CompanionHandler { get; }
+    public NetworkHandler NetworkHandler { get; }
     public PlayerHandler PlayerHandler { get; }
 
     public AnimationStorage AnimationStorage { get; }
 
     internal Multiplayer() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION)
     {
-        NetworkClient = new NetworkClient(new ClassicSerializer());
-        NetworkClient.OnClientConnected += TEMP_OnConnect;
-        NetworkClient.OnClientDisconnected += TEMP_OnDisconnect;
-        NetworkClient.OnPacketReceived += TEMP_OnReceive;
+        _client = new NetworkClient(new ClassicSerializer());
+        _client.OnClientConnected += TEMP_OnConnect;
+        _client.OnClientDisconnected += TEMP_OnDisconnect;
+        _client.OnPacketReceived += TEMP_OnReceive;
 
         CompanionHandler = new CompanionHandler();
+        NetworkHandler = new NetworkHandler(_client);
         PlayerHandler = new PlayerHandler();
 
         AnimationStorage = new AnimationStorage();
@@ -41,15 +43,13 @@ public class Multiplayer : BlasIIMod
             return;
 
         CompanionHandler.OnUpdate();
+        NetworkHandler.OnUpdate();
         PlayerHandler.OnUpdate();
 
         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Equals))
         {
-            // Connect
-            NetworkConnect();
+            NetworkHandler.Connect("localhost", 33002);
         }
-
-        NetworkUpdate();
     }
 
     protected override void OnSceneLoaded(string sceneName)
@@ -80,38 +80,5 @@ public class Multiplayer : BlasIIMod
     private void TEMP_OnReceive(BasePacket packet)
     {
         ModLog.Error("Received a packet");
-    }
-
-    private void NetworkConnect()
-    {
-        ModLog.Info($"Trying to connect to localhost:33002");
-
-        try
-        {
-            NetworkClient.Connect("localhost", 33002);
-            ModLog.Info($"Client connected to localhost:33002");
-        }
-        catch (System.Exception ex)
-        {
-            ModLog.Error($"Encountered an error when attempting to connect - {ex}");
-            return;
-        }
-    }
-
-    private void NetworkUpdate()
-    {
-        if (!NetworkClient.IsActive)
-            return;
-
-        try
-        {
-            NetworkClient.Receive();
-        }
-        catch (NetworkException ex)
-        {
-            ModLog.Error($"Encountered an error when receiving data - {ex}");
-        }
-
-        NetworkClient.Update();
     }
 }
