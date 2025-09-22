@@ -2,9 +2,9 @@
 
 namespace BlasII.Multiplayer.Core.Packets;
 
-public class AnimationPacket : BasePacket
+public class AnimationPacket : BasePacket, INamedPacket
 {
-    public string Name { get; }
+    public string Name { get; set; }
 
     public int State { get; }
 

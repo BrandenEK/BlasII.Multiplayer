@@ -2,9 +2,9 @@
 
 namespace BlasII.Multiplayer.Core.Packets;
 
-public class DirectionPacket : BasePacket
+public class DirectionPacket : BasePacket, INamedPacket
 {
-    public string Name { get; }
+    public string Name { get; set; }
 
     public bool FacingDirection { get; }
 

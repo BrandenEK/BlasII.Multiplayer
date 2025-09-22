@@ -2,6 +2,7 @@
 using Basalt.Framework.Networking.Client;
 using BlasII.ModdingAPI;
 using BlasII.Multiplayer.Client.Models;
+using BlasII.Multiplayer.Core.Packets;
 
 namespace BlasII.Multiplayer.Client;
 
@@ -18,6 +19,8 @@ public class NetworkHandler
 
     public void Connect(string ip, int port, RoomInfo room)
     {
+        _currentRoom = room;
+
         try
         {
             _client.Connect(ip, port);
@@ -27,13 +30,18 @@ public class NetworkHandler
             ModLog.Error($"Encountered an error when attempting to connect - {ex}");
             return;
         }
-
-        _currentRoom = room;
     }
 
     public void Send(BasePacket packet)
     {
-        // TODO: add name to packet
+        if (!_client.IsActive)
+            return;
+
+        if (packet is INamedPacket p)
+        {
+            ModLog.Info(packet.GetType().Name + " is named");
+            p.Name = _currentRoom.PlayerName;
+        }
 
         _client.Send(packet);
     }
