@@ -2,9 +2,9 @@
 
 namespace BlasII.Multiplayer.Core.Packets;
 
-public class EquipmentPacket : BasePacket
+public class EquipmentPacket : BasePacket, INamedPacket
 {
-    public string Name { get; }
+    public string Name { get; set; }
 
     public byte Type { get; }
 

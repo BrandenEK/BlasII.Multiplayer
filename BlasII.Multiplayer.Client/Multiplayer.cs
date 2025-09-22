@@ -1,5 +1,4 @@
-﻿using Basalt.Framework.Networking;
-using Basalt.Framework.Networking.Client;
+﻿using Basalt.Framework.Networking.Client;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
 using BlasII.Multiplayer.Client.Storages;
@@ -23,7 +22,6 @@ public class Multiplayer : BlasIIMod
         _client = new NetworkClient(new CoreSerializer());
         _client.OnClientConnected += TEMP_OnConnect;
         _client.OnClientDisconnected += TEMP_OnDisconnect;
-        _client.OnPacketReceived += TEMP_OnReceive;
 
         CompanionHandler = new CompanionHandler(_client);
         NetworkHandler = new NetworkHandler(_client);
@@ -48,7 +46,7 @@ public class Multiplayer : BlasIIMod
 
         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Equals))
         {
-            NetworkHandler.Connect("localhost", 33002);
+            NetworkHandler.Connect(SERVER, PORT, new Models.RoomInfo(ROOM, PLAYER, TEAM));
         }
     }
 
@@ -67,18 +65,20 @@ public class Multiplayer : BlasIIMod
         PlayerHandler.OnLeaveScene();
     }
 
+    // TODO: move these to the console popup + log
     private void TEMP_OnConnect(string ip)
     {
-        ModLog.Warn("Now connected");
+        ModLog.Info($"Connected to {ip}");
     }
 
     private void TEMP_OnDisconnect(string ip)
     {
-        ModLog.Warn("Now disconnected");
+        ModLog.Info($"Disconnected from {ip}");
     }
 
-    private void TEMP_OnReceive(BasePacket packet)
-    {
-        //ModLog.Error("Received a packet");
-    }
+    private const string SERVER = "localhost";
+    private const int PORT = 33002;
+    private const string PLAYER = "Damocles";
+    private const string ROOM = "TEST";
+    private const int TEAM = 1;
 }

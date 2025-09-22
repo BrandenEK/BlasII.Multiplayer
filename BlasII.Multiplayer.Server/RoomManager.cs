@@ -57,9 +57,6 @@ public class RoomManager
             return;
         }
 
-        // Split this up somehow
-        // Wont need to reassign the packet once name is added to everything
-
         // TODO: when entering a new scene, also send all status packets
 
         if (packet is PositionPacket position)
@@ -67,7 +64,6 @@ public class RoomManager
             player.PositionX = position.X;
             player.PositionY = position.Y;
 
-            position = new PositionPacket(player.Name, position.X, position.Y);
             _server.Send(_players.Keys.Where(x => x != ip), position);
         }
 
@@ -76,7 +72,6 @@ public class RoomManager
             player.AnimationState = animation.State;
             player.AnimationLength = animation.Length;
 
-            animation = new AnimationPacket(player.Name, animation.State, animation.Time, animation.Length);
             _server.Send(_players.Keys.Where(x => x != ip), animation);
         }
 
@@ -84,7 +79,6 @@ public class RoomManager
         {
             player.FacingDirection = direction.FacingDirection;
 
-            direction = new DirectionPacket(player.Name, direction.FacingDirection);
             _server.Send(_players.Keys.Where(x => x != ip), direction);
         }
 
@@ -97,7 +91,6 @@ public class RoomManager
             else if (equipment.Type == 2)
                 player.WeaponfxName = equipment.Equipment;
 
-            equipment = new EquipmentPacket(player.Name, equipment.Type, equipment.Equipment);
             _server.Send(_players.Keys.Where(x => x != ip), equipment);
         }
     }

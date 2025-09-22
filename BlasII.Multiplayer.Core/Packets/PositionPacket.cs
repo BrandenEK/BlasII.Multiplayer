@@ -2,7 +2,7 @@
 
 namespace BlasII.Multiplayer.Core.Packets;
 
-public class PositionPacket : BasePacket
+public class PositionPacket : BasePacket, INamedPacket
 {
     public string Name { get; set; }
 
