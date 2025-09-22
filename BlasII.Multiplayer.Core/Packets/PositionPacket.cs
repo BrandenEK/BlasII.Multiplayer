@@ -1,12 +1,13 @@
 ﻿using Basalt.Framework.Networking;
 
-namespace BlasII.Multiplayer.Client.Packets;
+namespace BlasII.Multiplayer.Core.Packets;
 
 public class PositionPacket : BasePacket
 {
     public string Name { get; set; }
 
     public float X { get; }
+
     public float Y { get; }
 
     //public static PositionPacket FromClient(float x, float y)

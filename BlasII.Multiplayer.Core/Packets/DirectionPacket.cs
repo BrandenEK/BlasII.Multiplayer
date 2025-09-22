@@ -1,6 +1,6 @@
 ﻿using Basalt.Framework.Networking;
 
-namespace BlasII.Multiplayer.Client.Packets;
+namespace BlasII.Multiplayer.Core.Packets;
 
 public class DirectionPacket : BasePacket
 {

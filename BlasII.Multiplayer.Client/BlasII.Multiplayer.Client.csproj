@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlasII.Multiplayer.Core\BlasII.Multiplayer.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Basalt.Framework.Networking">
       <HintPath>..\..\..\basalt\Basalt.Framework.Networking\Basalt.Framework.Networking\bin\Debug\net6.0\Basalt.Framework.Networking.dll</HintPath>
     </Reference>

@@ -1,5 +1,5 @@
 ﻿using BlasII.ModdingAPI;
-using BlasII.Multiplayer.Client.Packets;
+using BlasII.Multiplayer.Core.Packets;
 using Il2CppTGK.Game;
 using UnityEngine;
 

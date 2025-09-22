@@ -3,9 +3,9 @@ using Basalt.Framework.Networking.Client;
 using Basalt.Framework.Networking.Serializers;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
-using BlasII.Multiplayer.Client.Packets;
 using BlasII.Multiplayer.Client.PacketSerializers;
 using BlasII.Multiplayer.Client.Storages;
+using BlasII.Multiplayer.Core.Packets;
 using Il2CppTGK.Game;
 
 namespace BlasII.Multiplayer.Client;

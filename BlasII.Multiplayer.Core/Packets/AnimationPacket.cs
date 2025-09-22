@@ -1,13 +1,15 @@
 ﻿using Basalt.Framework.Networking;
 
-namespace BlasII.Multiplayer.Client.Packets;
+namespace BlasII.Multiplayer.Core.Packets;
 
 public class AnimationPacket : BasePacket
 {
     public string Name { get; }
 
     public int State { get; }
+
     public float Time { get; }
+
     public float Length { get; }
 
     public AnimationPacket(string name, int state, float time, float length)
