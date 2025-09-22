@@ -30,11 +30,12 @@
   </ItemGroup>
 
   <Target Name="Development" AfterTargets="PostBuildEvent">
-
+    
     <!-- Get plugin & resources -->
     <ItemGroup>
-      <PluginDll Include="$(TargetPath)" />
       <Resources Include="$(SolutionDir)\resources\**\*.*" />
+      <PluginDll Include="$(TargetPath)" />
+      <CoreDll Include="$(TargetDir)BlasII.Multiplayer.Core.dll" />
     </ItemGroup>
 
     <!-- Get export directories -->
@@ -46,11 +47,13 @@
     <!-- Export to dev folder -->
     <Copy SourceFiles="@(Resources)" DestinationFolder="$(DevFolder)\%(RecursiveDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(PluginDll)" DestinationFolder="$(DevFolder)\plugins" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(CoreDll)" DestinationFolder="$(DevFolder)\data" SkipUnchangedFiles="true" />
 
     <!-- Export to publish folder -->
     <RemoveDir Directories="$(PublishFolder)" />
     <Copy SourceFiles="@(Resources)" DestinationFolder="$(PublishFolder)\%(RecursiveDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(PluginDll)" DestinationFolder="$(PublishFolder)\plugins" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(CoreDll)" DestinationFolder="$(PublishFolder)\data" SkipUnchangedFiles="true" />
     <ZipDirectory SourceDirectory="$(PublishFolder)" DestinationFile="$(PublishFolder)\..\$(TargetName).zip" Overwrite="true" />
 
   </Target>
