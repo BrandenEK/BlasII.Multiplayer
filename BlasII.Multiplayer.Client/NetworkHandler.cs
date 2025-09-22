@@ -27,6 +27,11 @@ public class NetworkHandler
         }
     }
 
+    public void Send(BasePacket packet)
+    {
+        _client.Send(packet);
+    }
+
     public void OnUpdate()
     {
         if (!_client.IsActive)

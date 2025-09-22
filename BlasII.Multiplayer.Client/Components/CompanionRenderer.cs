@@ -43,7 +43,7 @@ public class CompanionRenderer
         _length = length;
     }
 
-    public void UpdateEquipment(int type, string name)
+    public void UpdateEquipment(byte type, string name)
     {
         if (type < 0 || type > 2)
         {

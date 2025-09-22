@@ -86,7 +86,7 @@ public class CompanionHandler
         c.Transform.UpdateDirection(direction);
     }
 
-    public void TempGetEquipment(int type, string name)
+    public void TempGetEquipment(byte type, string name)
     {
         Companion c = GetCompanionByName("Test");
         c.Renderer.UpdateEquipment(type, name);
