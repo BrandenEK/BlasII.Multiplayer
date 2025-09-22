@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlasII.Multiplayer.Client",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlasII.Multiplayer.Server", "BlasII.Multiplayer.Server\BlasII.Multiplayer.Server.csproj", "{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlasII.Multiplayer.Core", "BlasII.Multiplayer.Core\BlasII.Multiplayer.Core.csproj", "{64583B37-407C-4623-BD0B-18EB35233204}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C82F7DD2-6F20-4EB2-9AC4-36186CACB181}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64583B37-407C-4623-BD0B-18EB35233204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64583B37-407C-4623-BD0B-18EB35233204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64583B37-407C-4623-BD0B-18EB35233204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64583B37-407C-4623-BD0B-18EB35233204}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
