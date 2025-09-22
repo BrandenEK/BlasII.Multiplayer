@@ -1,4 +1,5 @@
 ﻿using BlasII.ModdingAPI;
+using BlasII.Multiplayer.Core.Packets;
 using Il2CppTGK.Game;
 using UnityEngine;
 
@@ -70,8 +71,7 @@ public class PlayerHandler
         ModLog.Warn($"New position: {currPosition}");
         _lastPosition = currPosition;
 
-        // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetPosition(currPosition);
+        Main.Multiplayer.NetworkHandler.Send(new PositionPacket(null, x, y));
     }
 
     private void CheckAnimation(Animator armor)
@@ -86,9 +86,7 @@ public class PlayerHandler
         ModLog.Warn($"New animation: {currAnimationState}");
         _lastAnimationState = currAnimationState;
 
-        // Send packet
-        float length = animState.length;
-        Main.Multiplayer.CompanionHandler.TempGetAnimation(currAnimationState, currAnimationTime, length);
+        Main.Multiplayer.NetworkHandler.Send(new AnimationPacket(null, currAnimationState, currAnimationTime, animState.length));
     }
 
     private void CheckDirection(Transform tpo)
@@ -101,8 +99,7 @@ public class PlayerHandler
         ModLog.Warn($"New direction: {currDirection}");
         _lastDirection = currDirection;
 
-        // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetDirection(currDirection);
+        Main.Multiplayer.NetworkHandler.Send(new DirectionPacket(null, currDirection));
     }
 
     private void CheckArmor(Animator armor)
@@ -115,8 +112,7 @@ public class PlayerHandler
         ModLog.Warn($"New armor: {currArmorName}");
         _lastArmorName = currArmorName;
 
-        // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetEquipment(0, currArmorName);
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 0, currArmorName));
     }
 
     private void CheckWeapon(Animator weapon)
@@ -129,8 +125,7 @@ public class PlayerHandler
         ModLog.Warn($"New weapon: {currWeaponName}");
         _lastWeaponName = currWeaponName;
 
-        // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetEquipment(1, currWeaponName);
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 1, currWeaponName));
     }
 
     private void CheckWeaponEffects(Animator weaponfx)
@@ -143,8 +138,7 @@ public class PlayerHandler
         ModLog.Warn($"New weaponfx: {currWeaponfxName}");
         _lastWeaponfxName = currWeaponfxName;
 
-        // Send packet
-        Main.Multiplayer.CompanionHandler.TempGetEquipment(2, currWeaponfxName);
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 2, currWeaponfxName));
     }
 
     private const int PRECISION = 5;

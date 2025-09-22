@@ -1,8 +1,8 @@
 ﻿using Basalt.Framework.Logging;
 using Basalt.Framework.Logging.Standard;
 using Basalt.Framework.Networking;
-using Basalt.Framework.Networking.Serializers;
 using Basalt.Framework.Networking.Server;
+using BlasII.Multiplayer.Core;
 using System;
 using System.Threading;
 
@@ -16,7 +16,7 @@ internal class Core
 
         var room = new RoomManager();
 
-        var server = new NetworkServer(new ClassicSerializer());
+        var server = new NetworkServer(new CoreSerializer());
         server.OnClientConnected += room.OnClientConnected;
         server.OnClientDisconnected += room.OnClientDisconnected;
         server.OnPacketReceived += room.OnPacketReceived;
