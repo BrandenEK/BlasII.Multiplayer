@@ -1,4 +1,5 @@
-﻿using BlasII.ModdingAPI;
+﻿using Basalt.Framework.Networking.Client;
+using BlasII.ModdingAPI;
 using BlasII.Multiplayer.Core.Packets;
 using Il2CppTGK.Game;
 using UnityEngine;
@@ -10,11 +11,17 @@ public class PlayerHandler
     private Vector2 _lastPosition;
     private int _lastAnimationState;
     private float _lastAnimationTime;
+    private float _lastAnimationLength;
     private bool _lastDirection;
 
     private string _lastArmorName;
     private string _lastWeaponName;
     private string _lastWeaponfxName;
+
+    public PlayerHandler(NetworkClient client)
+    {
+        client.OnClientConnected += OnClientConnected;
+    }
 
     public void OnEnterScene() // Not sure if this actually does anything
     {
@@ -59,6 +66,18 @@ public class PlayerHandler
         CheckWeaponEffects(weaponfx);
     }
 
+    private void OnClientConnected(string ip)
+    {
+        ModLog.Info("Sending all status packets");
+
+        Main.Multiplayer.NetworkHandler.Send(new PositionPacket(null, _lastPosition.x, _lastPosition.y));
+        Main.Multiplayer.NetworkHandler.Send(new AnimationPacket(null, _lastAnimationState, _lastAnimationTime, _lastAnimationLength));
+        Main.Multiplayer.NetworkHandler.Send(new DirectionPacket(null, _lastDirection));
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 0, _lastArmorName));
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 1, _lastWeaponName));
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 2, _lastWeaponfxName));
+    }
+
     private void CheckPosition(Transform tpo)
     {
         float x = Mathf.Round(tpo.position.x * PRECISION) / PRECISION;
@@ -85,6 +104,8 @@ public class PlayerHandler
 
         ModLog.Warn($"New animation: {currAnimationState}");
         _lastAnimationState = currAnimationState;
+        _lastAnimationTime = currAnimationTime;
+        _lastAnimationLength = animState.length;
 
         Main.Multiplayer.NetworkHandler.Send(new AnimationPacket(null, currAnimationState, currAnimationTime, animState.length));
     }

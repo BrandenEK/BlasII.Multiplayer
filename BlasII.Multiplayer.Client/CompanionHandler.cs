@@ -35,6 +35,8 @@ public class CompanionHandler
 
     private void OnPacketReceived(BasePacket packet)
     {
+        ModLog.Info($"Received packet of type {packet.GetType().Name}");
+
         if (packet is PositionPacket position)
             OnReceivePosition(position.Name, new Vector2(position.X, position.Y));
 
