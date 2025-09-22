@@ -4,6 +4,25 @@ namespace BlasII.Multiplayer.Client.Packets;
 
 public class PositionPacket : BasePacket
 {
-    public float X { get; set; }
-    public float Y { get; set; }
+    public string Name { get; set; }
+
+    public float X { get; }
+    public float Y { get; }
+
+    //public static PositionPacket FromClient(float x, float y)
+    //{
+    //    return new PositionPacket(null, x, y);
+    //}
+
+    //public static PositionPacket FromServer(string name, float x, float y)
+    //{
+    //    return new PositionPacket(name, x, y);
+    //}
+
+    public PositionPacket(string name, float x, float y)
+    {
+        Name = name;
+        X = x;
+        Y = y;
+    }
 }

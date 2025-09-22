@@ -4,6 +4,15 @@ namespace BlasII.Multiplayer.Client.Packets;
 
 public class EquipmentPacket : BasePacket
 {
-    public byte Type { get; set; }
-    public string Name { get; set; }
+    public string Name { get; }
+
+    public byte Type { get; }
+    public string Equipment { get; }
+
+    public EquipmentPacket(string name, byte type, string equipment)
+    {
+        Name = name;
+        Type = type;
+        Equipment = equipment;
+    }
 }

@@ -71,11 +71,7 @@ public class PlayerHandler
         ModLog.Warn($"New position: {currPosition}");
         _lastPosition = currPosition;
 
-        Main.Multiplayer.NetworkHandler.Send(new PositionPacket()
-        {
-            X = currPosition.x,
-            Y = currPosition.y,
-        });
+        Main.Multiplayer.NetworkHandler.Send(new PositionPacket(null, x, y));
     }
 
     private void CheckAnimation(Animator armor)
@@ -90,12 +86,7 @@ public class PlayerHandler
         ModLog.Warn($"New animation: {currAnimationState}");
         _lastAnimationState = currAnimationState;
 
-        Main.Multiplayer.NetworkHandler.Send(new AnimationPacket()
-        {
-            State = currAnimationState,
-            Time = currAnimationTime,
-            Length = animState.length,
-        });
+        Main.Multiplayer.NetworkHandler.Send(new AnimationPacket(null, currAnimationState, currAnimationTime, animState.length));
     }
 
     private void CheckDirection(Transform tpo)
@@ -108,10 +99,7 @@ public class PlayerHandler
         ModLog.Warn($"New direction: {currDirection}");
         _lastDirection = currDirection;
 
-        Main.Multiplayer.NetworkHandler.Send(new DirectionPacket()
-        {
-            FacingDirection = currDirection,
-        });
+        Main.Multiplayer.NetworkHandler.Send(new DirectionPacket(null, currDirection));
     }
 
     private void CheckArmor(Animator armor)
@@ -124,11 +112,7 @@ public class PlayerHandler
         ModLog.Warn($"New armor: {currArmorName}");
         _lastArmorName = currArmorName;
 
-        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket()
-        {
-            Type = 0,
-            Name = currArmorName,
-        });
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 0, currArmorName));
     }
 
     private void CheckWeapon(Animator weapon)
@@ -141,11 +125,7 @@ public class PlayerHandler
         ModLog.Warn($"New weapon: {currWeaponName}");
         _lastWeaponName = currWeaponName;
 
-        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket()
-        {
-            Type = 1,
-            Name = currWeaponName,
-        });
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 1, currWeaponName));
     }
 
     private void CheckWeaponEffects(Animator weaponfx)
@@ -158,11 +138,7 @@ public class PlayerHandler
         ModLog.Warn($"New weaponfx: {currWeaponfxName}");
         _lastWeaponfxName = currWeaponfxName;
 
-        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket()
-        {
-            Type = 2,
-            Name = currWeaponfxName,
-        });
+        Main.Multiplayer.NetworkHandler.Send(new EquipmentPacket(null, 2, currWeaponfxName));
     }
 
     private const int PRECISION = 5;
