@@ -74,8 +74,6 @@ public class NametagHandler
         nametag.shadowText.rectTransform.anchorMin = viewPos;
         nametag.shadowText.rectTransform.anchorMax = viewPos;
         nametag.shadowText.rectTransform.anchoredPosition = Vector2.zero;
-
-        ModLog.Warn("Updating positon to " + viewPos);
     }
 
     private UIPixelTextWithShadow AddNametag(string name)
